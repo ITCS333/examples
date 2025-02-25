@@ -1,0 +1,75 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+section {
+    margin: 30px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* [] - Matches elements with the attribute */
+[title] {
+    border-bottom: 2px dotted #007bff;
+    cursor: help;
+}
+
+/* [=] - Exact match */
+a[title="posts from this country"] {
+    background-color: #ffeb3b;
+    padding: 2px 5px;
+    text-decoration: none;
+    color: #333;
+}
+
+/* [~=] - Contains word in space-separated list */
+[title~="Countries"] {
+    border: 2px solid #4caf50;
+    padding: 5px;
+    display: inline-block;
+}
+
+/* [^=] - Begins with */
+a[href^="mailto"] {
+    background-color: #ff9800;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+/* [*=] - Contains substring */
+img[src*="Flag"] {
+    border: 3px solid #e91e63;
+    padding: 5px;
+}
+
+/* [$=] - Ends with */
+a[href$=".pdf"] {
+    background-color: #f44336;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Add a PDF icon using pseudo-element */
+a[href$=".pdf"]::after {
+    /* 	U+1F4C4 Page Facing Up */
+    content: " 📄";
+    margin-left: 5px;
+}
+
+.explanation {
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+}

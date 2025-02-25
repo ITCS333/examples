@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Pseudo Selectors Demo</title>
+    <link rel="stylesheet" href="pseudo.css">
+</head>
+
+<body>
+    <h1>CSS Pseudo Selectors Demo</h1>
+
+    <section>
+        <h2>Link States (:link, :visited, :hover, :active)</h2>
+        <p><a href="https://example.com">Click this link</a> to see different states</p>
+        <p class="explanation">The link changes color based on its state (unvisited, visited, hover, active)</p>
+    </section>
+
+    <section>
+        <h2>Child Selectors (:first-child, :last-child, :nth-child)</h2>
+        <ul class="custom-list">
+            <li>First Child</li>
+            <li>Second Child (nth-child(2))</li>
+            <li>Third Child</li>
+            <li>Last Child</li>
+        </ul>
+        <p class="explanation">Each list item has different styling based on its position</p>
+    </section>
+
+    <section>
+        <h2>First Letter (::first-letter)</h2>
+        <p class="drop-cap">This paragraph demonstrates the drop cap effect using the ::first-letter pseudo-element. The
+            rest of the text continues normally.</p>
+        <p class="explanation">The first letter is larger and styled differently</p>
+    </section>
+
+    <section>
+        <h2>First Line (::first-line)</h2>
+        <p class="first-line">This is the first line of text which will be styled differently.
+            This is the second line which will appear normal.
+            And this is the third line which will also be normal.</p>
+        <p class="explanation">The first line is bold and blue, regardless of window size</p>
+    </section>
+</body>
+
+</html>

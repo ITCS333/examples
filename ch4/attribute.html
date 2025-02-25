@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Attribute Selectors Demo</title>
+    <link rel="stylesheet" href="attribute.css">
+</head>
+
+<body>
+    <h1>CSS Attribute Selectors Demo</h1>
+
+    <section>
+        <h2>[] - Has Attribute</h2>
+        <p><span title="This is a tooltip">Hover over me</span> to see the tooltip.</p>
+        <p class="explanation">Elements with any title attribute have a dotted underline</p>
+    </section>
+
+    <section>
+        <h2>[=] - Exact Match</h2>
+        <p><a href="#" title="posts from this country">Posts from Sweden</a></p>
+        <p class="explanation">Link with exact title="posts from this country" has yellow background</p>
+    </section>
+
+    <section>
+        <h2>[~=] - Contains Word</h2>
+        <p><span title="European Countries List">Countries Database</span></p>
+        <p class="explanation">Element containing "Countries" in its title has a green border</p>
+    </section>
+
+    <section>
+        <h2>[^=] - Begins With</h2>
+        <p><a href="mailto:example@example.com">Send Email</a></p>
+        <p class="explanation">Links beginning with "mailto:" have orange background</p>
+    </section>
+
+    <section>
+        <h2>[*=] - Contains Substring</h2>
+        <p><img src="SwedishFlag.png" alt="Flag" width="100" height="60"></p>
+        <p class="explanation">Images with "Flag" in their src have pink border</p>
+    </section>
+
+    <section>
+        <h2>[$=] - Ends With</h2>
+        <p><a href="document.pdf">Download Document</a></p>
+        <p class="explanation">Links ending in .pdf have red background and PDF icon</p>
+    </section>
+</body>
+
+</html>

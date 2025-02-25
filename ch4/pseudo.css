@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+section {
+    margin: 30px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Link states */
+a:link {
+    color: #2196f3;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #e9cb44;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #1976d2;
+}
+
+a:active {
+    color: #f44336;
+}
+
+/* List styling */
+.custom-list {
+    list-style: none;
+    padding: 0;
+}
+
+.custom-list li {
+    padding: 10px;
+    background-color: #f5f5f5;
+    margin: 5px 0;
+}
+
+.custom-list li:first-child {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.custom-list li:last-child {
+    background-color: #fce4ec;
+    border-left: 4px solid #e91e63;
+}
+
+.custom-list li:nth-child(2) {
+    background-color: #f3e5f5;
+    border-left: 4px solid #9c27b0;
+}
+
+/* Paragraph with drop cap */
+.drop-cap::first-letter {
+    font-size: 3em;
+    float: left;
+    padding-right: 8px;
+    color: #2196f3;
+    font-weight: bold;
+}
+
+/* First line styling */
+.first-line::first-line {
+    font-weight: bold;
+    color: #1976d2;
+}
+
+/* Style explanations */
+.explanation {
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
