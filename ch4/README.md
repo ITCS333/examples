@@ -5,4 +5,4 @@ This chapter has the following examples:
 2. [Example 2](attribute.md): Attributes Selectors.
 3. [Example 3](pseudo.md): Pseudo Classes.
 
-Each link will take you to an explination of the example.
+Each link will take you to an explanation of the example.
