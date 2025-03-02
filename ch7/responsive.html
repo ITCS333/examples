@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Web Design Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        h1, h2, h3 {
+            color: #0088a9;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .demo-container {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border: 2px dashed #0088a9;
+            border-radius: 4px;
+        }
+        
+        .code-example {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .device-preview {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .device {
+            margin: 15px;
+            text-align: center;
+        }
+        
+        .device-frame {
+            border: 12px solid #333;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .mobile-frame {
+            width: 320px;
+            height: 568px;
+        }
+        
+        .tablet-frame {
+            width: 768px;
+            height: 500px;
+        }
+        
+        .desktop-frame {
+            width: 1200px;
+            height: 600px;
+            max-width: 100%;
+        }
+        
+        .device-content {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+        
+        .device-label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .demo-page {
+            background-color: white;
+            height: 100%;
+        }
+        
+        .demo-page header {
+            background-color: #0088a9;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .demo-page nav {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .demo-page nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+        
+        .demo-page main {
+            padding: 15px;
+        }
+        
+        .demo-page .hero {
+            background-color: #e1f5fe;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .demo-page .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        
+        .demo-page .feature {
+            background-color: #f5f5f5;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .demo-page footer {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .viewport-indicator {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .responsive-img-demo {
+            margin: 20px 0;
+        }
+        
+        .img-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .control-panel {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background-color: #0088a9;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #00677e;
+        }
+        
+        button.active {
+            background-color: #004d5e;
+        }
+        
+        /* Media Queries for the demo page */
+        @media only screen and (max-width: 480px) {
+            .mobile-styles {
+                background-color: #ffecb3;
+            }
+            
+            .mobile-styles .demo-page .features {
+                flex-direction: column;
+            }
+            
+            .mobile-styles .demo-page nav {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tablet-styles .tablet-indicator,
+            .desktop-styles .desktop-indicator {
+                display: none;
+            }
+        }
+        
+        @media only screen and (min-width: 481px) and (max-width: 768px) {
+            .tablet-styles {
+                background-color: #e1f5fe;
+            }
+            
+            .tablet-styles .demo-page .feature {
+                flex-basis: calc(50% - 20px);
+            }
+            
+            .mobile-styles .mobile-indicator,
+            .desktop-styles .desktop-indicator {
+                display: none;
+            }
+        }
+        
+        @media only screen and (min-width: 769px) {
+            .desktop-styles {
+                background-color: #e8f5e9;
+            }
+            
+            .desktop-styles .demo-page .feature {
+                flex-basis: calc(33.333% - 20px);
+            }
+            
+            .mobile-styles .mobile-indicator,
+            .tablet-styles .tablet-indicator {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .device-frame.tablet-frame,
+            .device-frame.desktop-frame {
+                transform: scale(0.8);
+                transform-origin: top left;
+            }
+            
+            .device {
+                overflow: hidden;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .device-frame.tablet-frame,
+            .device-frame.desktop-frame {
+                transform: scale(0.5);
+                transform-origin: top left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Responsive Web Design Demo</h1>
+    <p>An interactive demonstration of responsive web design concepts.</p>
+    
+    <!-- Viewport Section -->
+    <div class="section">
+        <h2>Setting the Viewport</h2>
+        <p>The viewport meta tag ensures proper scaling on mobile devices.</p>
+        
+        <div class="demo-container">
+            <div class="code-example">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</div>
+            
+            <p><strong>width=device-width</strong> - Sets the width of the viewport to the device's screen width</p>
+            <p><strong>initial-scale=1.0</strong> - Sets the initial zoom level when the page is first loaded</p>
+            
+            <div class="control-panel">
+                <span class="property-label">Toggle viewport settings:</span>
+                <button id="viewport-toggle" class="active">Viewport Meta Tag ON</button>
+            </div>
+            
+            <div class="device-preview">
+                <div class="device">
+                    <div class="device-frame mobile-frame">
+                        <div class="device-content" id="mobile-preview">
+                            <div class="demo-page">
+                                <header>
+                                    <h2>Demo Website</h2>
+                                </header>
+                                <nav>
+                                    <a href="#">Home</a>
+                                    <a href="#">About</a>
+                                    <a href="#">Services</a>
+                                    <a href="#">Contact</a>
+                                </nav>
+                                <main>
+                                    <div class="hero">
+                                        <h3>Welcome to our site</h3>
+                                        <p>This demonstrates responsive design techniques</p>
+                                    </div>
+                                    <div class="features">
+                                        <div class="feature">
+                                            <h4>Feature 1</h4>
+                                            <p>Description of the first feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 2</h4>
+                                            <p>Description of the second feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 3</h4>
+                                            <p>Description of the third feature</p>
+                                        </div>
+                                    </div>
+                                </main>
+                                <footer>
+                                    <p>&copy; 2025 Responsive Demo</p>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-label">Mobile (320px)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Media Queries Section -->
+    <div class="section">
+        <h2>Media Queries</h2>
+        <p>CSS media queries allow you to apply different styles based on device characteristics.</p>
+        
+        <div class="demo-container">
+            <div class="code-example">/* Mobile styles */
+@media only screen and (max-width: 480px) {
+    .features {
+        flex-direction: column;
+    }
+    nav {
+        flex-direction: column;
+    }
+}
+
+/* Tablet styles */
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+    .feature {
+        flex-basis: calc(50% - 20px);
+    }
+}
+
+/* Desktop styles */
+@media only screen and (min-width: 769px) {
+    .feature {
+        flex-basis: calc(33.333% - 20px);
+    }
+}</div>
+            
+            <div class="control-panel">
+                <span class="property-label">View styles for:</span>
+                <button class="media-btn active" data-media="mobile">Mobile</button>
+                <button class="media-btn" data-media="tablet">Tablet</button>
+                <button class="media-btn" data-media="desktop">Desktop</button>
+            </div>
+            
+            <div class="device-preview">
+                <div class="device" id="media-device">
+                    <div class="device-frame mobile-frame" id="media-frame">
+                        <div class="device-content" id="media-preview">
+                            <div class="viewport-indicator mobile-indicator">Mobile View</div>
+                            <div class="viewport-indicator tablet-indicator">Tablet View</div>
+                            <div class="viewport-indicator desktop-indicator">Desktop View</div>
+                            <div class="demo-page">
+                                <header>
+                                    <h2>Media Query Demo</h2>
+                                </header>
+                                <nav>
+                                    <a href="#">Home</a>
+                                    <a href="#">About</a>
+                                    <a href="#">Services</a>
+                                    <a href="#">Contact</a>
+                                </nav>
+                                <main>
+                                    <div class="hero">
+                                        <h3>Responsive Layout</h3>
+                                        <p>This layout adapts to different screen sizes</p>
+                                    </div>
+                                    <div class="features">
+                                        <div class="feature">
+                                            <h4>Feature 1</h4>
+                                            <p>Description of the first feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 2</h4>
+                                            <p>Description of the second feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 3</h4>
+                                            <p>Description of the third feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 4</h4>
+                                            <p>Description of the fourth feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 5</h4>
+                                            <p>Description of the fifth feature</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h4>Feature 6</h4>
+                                            <p>Description of the sixth feature</p>
+                                        </div>
+                                    </div>
+                                </main>
+                                <footer>
+                                    <p>&copy; 2025 Media Query Demo</p>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-label" id="media-label">Mobile (320px)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Responsive Images Section -->
+    <div class="section">
+        <h2>Responsive Images</h2>
+        <p>Make images adapt to different screen sizes using CSS and the picture element.</p>
+        
+        <div class="demo-container">
+            <h3>Basic Responsive Images with CSS</h3>
+            <div class="code-example">img {
+    max-width: 100%;
+    height: auto;
+}</div>
+            <p>This makes images scale down if their container is smaller than the image's natural size.</p>
+            
+            <h3>Advanced Image Handling with &lt;picture&gt; Element</h3>
+            <div class="code-example">&lt;picture&gt;
+    &lt;source media="(min-width: 960px)" srcset="large-image.jpg"&gt;
+    &lt;source media="(min-width: 480px)" srcset="medium-image.jpg"&gt;
+    &lt;img src="small-image.jpg" alt="Responsive image"&gt;
+&lt;/picture&gt;</div>
+            <p>The picture element allows you to define different image sources for different viewport sizes.</p>
+            
+            <div class="control-panel">
+                <span class="property-label">View on:</span>
+                <button class="img-btn active" data-size="small">Small Screen</button>
+                <button class="img-btn" data-size="medium">Medium Screen</button>
+                <button class="img-btn" data-size="large">Large Screen</button>
+            </div>
+            
+            <div class="responsive-img-demo">
+                <div class="img-container" id="img-demo">
+                    <div class="picture-simulation">
+                        <div class="viewport-indicator" id="img-size-indicator">Small Screen (320px)</div>
+                        <div class="code-block" id="current-image-code">
+                            <p>&lt;!-- Browser chooses the small image --&gt;</p>
+                            <p>&lt;img src="small-image.jpg" alt="Responsive image"&gt;</p>
+                        </div>
+                        <div class="img-placeholder" style="background-color: #b2dfdb; height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                            <span id="img-size-text" style="font-weight: bold;">Small Image (320px)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Progressive Enhancement Section -->
+    <div class="section">
+        <h2>Progressive Enhancement</h2>
+        <p>Design for mobile first, then enhance for larger screens.</p>
+        
+        <div class="demo-container">
+            <div class="code-example">/* Base styles for all devices */
+.site-header {
+    padding: 10px;
+    text-align: center;
+}
+
+/* Tablet enhancements */
+@media (min-width: 481px) {
+    .site-header {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Desktop enhancements */
+@media (min-width: 769px) {
+    .site-header {
+        padding: 20px;
+        justify-content: space-between;
+    }
+}</div>
+            
+            <div class="control-panel">
+                <span class="property-label">View progressive enhancements for:</span>
+                <button class="pe-btn active" data-pe="mobile">Mobile (Base)</button>
+                <button class="pe-btn" data-pe="tablet">Tablet (Enhanced)</button>
+                <button class="pe-btn" data-pe="desktop">Desktop (Enhanced)</button>
+            </div>
+            
+            <div class="device-preview">
+                <div class="device" id="pe-device">
+                    <div class="device-frame mobile-frame" id="pe-frame">
+                        <div class="device-content" id="pe-preview">
+                            <div class="viewport-indicator">Mobile First Approach</div>
+                            <div class="demo-page">
+                                <header id="pe-header" style="display: block; text-align: center; padding: 10px;">
+                                    <div class="logo" style="margin-bottom: 10px;">Logo</div>
+                                    <nav style="display: block;">
+                                        <a href="#">Home</a>
+                                        <a href="#">About</a>
+                                        <a href="#">Services</a>
+                                        <a href="#">Contact</a>
+                                    </nav>
+                                </header>
+                                <main>
+                                    <div class="hero">
+                                        <h3>Progressive Enhancement</h3>
+                                        <p>Start simple, add features as screen size increases</p>
+                                    </div>
+                                    <div class="features" id="pe-features" style="flex-direction: column;">
+                                        <div class="feature" style="width: 100%;">
+                                            <h4>Feature 1</h4>
+                                            <p>Description of the first feature</p>
+                                        </div>
+                                        <div class="feature" style="width: 100%;">
+                                            <h4>Feature 2</h4>
+                                            <p>Description of the second feature</p>
+                                        </div>
+                                        <div class="feature" style="width: 100%;">
+                                            <h4>Feature 3</h4>
+                                            <p>Description of the third feature</p>
+                                        </div>
+                                    </div>
+                                </main>
+                                <footer>
+                                    <p>&copy; 2025 Progressive Demo</p>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-label" id="pe-label">Mobile (Base Styles)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Viewport Toggle
+        document.getElementById('viewport-toggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            
+            const mobilePreview = document.getElementById('mobile-preview');
+            
+            if (this.classList.contains('active')) {
+                this.textContent = 'Viewport Meta Tag ON';
+                mobilePreview.style.width = '100%';
+                mobilePreview.style.zoom = '1';
+            } else {
+                this.textContent = 'Viewport Meta Tag OFF';
+                mobilePreview.style.width = '980px';
+                mobilePreview.style.zoom = '0.33';
+            }
+        });
+        
+        // Media Queries Demo
+        document.querySelectorAll('.media-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.media-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Get the media type
+                const mediaType = button.getAttribute('data-media');
+                const mediaFrame = document.getElementById('media-frame');
+                const mediaPreview = document.getElementById('media-preview');
+                const mediaLabel = document.getElementById('media-label');
+                
+                // Remove existing classes
+                mediaPreview.classList.remove('mobile-styles', 'tablet-styles', 'desktop-styles');
+                
+                // Update the device preview
+                if (mediaType === 'mobile') {
+                    mediaFrame.className = 'device-frame mobile-frame';
+                    mediaPreview.classList.add('mobile-styles');
+                    mediaLabel.textContent = 'Mobile (320px)';
+                } else if (mediaType === 'tablet') {
+                    mediaFrame.className = 'device-frame tablet-frame';
+                    mediaPreview.classList.add('tablet-styles');
+                    mediaLabel.textContent = 'Tablet (768px)';
+                } else if (mediaType === 'desktop') {
+                    mediaFrame.className = 'device-frame desktop-frame';
+                    mediaPreview.classList.add('desktop-styles');
+                    mediaLabel.textContent = 'Desktop (1200px)';
+                }
+            });
+        });
+        
+        // Responsive Images Demo
+        document.querySelectorAll('.img-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.img-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Get the image size
+                const size = button.getAttribute('data-size');
+                const sizeIndicator = document.getElementById('img-size-indicator');
+                const sizeText = document.getElementById('img-size-text');
+                const codeBlock = document.getElementById('current-image-code');
+                const imgPlaceholder = document.querySelector('.img-placeholder');
+                
+                // Update the image preview
+                if (size === 'small') {
+                    sizeIndicator.textContent = 'Small Screen (320px)';
+                    sizeText.textContent = 'Small Image (320px)';
+                    imgPlaceholder.style.height = '200px';
+                    imgPlaceholder.style.backgroundColor = '#b2dfdb';
+                    codeBlock.innerHTML = '<p>&lt;!-- Browser chooses the small image --&gt;</p><p>&lt;img src="small-image.jpg" alt="Responsive image"&gt;</p>';
+                } else if (size === 'medium') {
+                    sizeIndicator.textContent = 'Medium Screen (768px)';
+                    sizeText.textContent = 'Medium Image (768px)';
+                    imgPlaceholder.style.height = '300px';
+                    imgPlaceholder.style.backgroundColor = '#80cbc4';
+                    codeBlock.innerHTML = '<p>&lt;!-- Browser chooses the medium image --&gt;</p><p>&lt;source media="(min-width: 480px)" srcset="medium-image.jpg"&gt;</p>';
+                } else if (size === 'large') {
+                    sizeIndicator.textContent = 'Large Screen (1200px)';
+                    sizeText.textContent = 'Large Image (1200px)';
+                    imgPlaceholder.style.height = '400px';
+                    imgPlaceholder.style.backgroundColor = '#4db6ac';
+                    codeBlock.innerHTML = '<p>&lt;!-- Browser chooses the large image --&gt;</p><p>&lt;source media="(min-width: 960px)" srcset="large-image.jpg"&gt;</p>';
+                }
+            });
+        });
+        
+        // Progressive Enhancement Demo
+        document.querySelectorAll('.pe-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.pe-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Get the progressive enhancement type
+                const peType = button.getAttribute('data-pe');
+                const peFrame = document.getElementById('pe-frame');
+                const peLabel = document.getElementById('pe-label');
+                const peHeader = document.getElementById('pe-header');
+                const peFeatures = document.getElementById('pe-features');
+                
+                // Update the device preview
+                if (peType === 'mobile') {
+                    peFrame.className = 'device-frame mobile-frame';
+                    peLabel.textContent = 'Mobile (Base Styles)';
+                    
+                    // Mobile styling
+                    peHeader.style.display = 'block';
+                    peHeader.style.textAlign = 'center';
+                    peHeader.style.padding = '10px';
+                    peHeader.querySelector('.logo').style.marginBottom = '10px';
+                    peHeader.querySelector('nav').style.display = 'block';
+                    
+                    peFeatures.style.flexDirection = 'column';
+                    Array.from(peFeatures.children).forEach(feature => {
+                        feature.style.width = '100%';
+                    });
+                    
+                } else if (peType === 'tablet') {
+                    peFrame.className = 'device-frame tablet-frame';
+                    peLabel.textContent = 'Tablet (Enhanced)';
+                    
+                    // Tablet styling
+                    peHeader.style.display = 'flex';
+                    peHeader.style.alignItems = 'center';
+                    peHeader.style.textAlign = 'left';
+                    peHeader.style.padding = '15px';
+                    peHeader.querySelector('.logo').style.marginBottom = '0';
+                    peHeader.querySelector('nav').style.display = 'flex';
+                    peHeader.querySelector('nav').style.marginLeft = 'auto';
+                    
+                    peFeatures.style.flexDirection = 'row';
+                    peFeatures.style.flexWrap = 'wrap';
+                    Array.from(peFeatures.children).forEach(feature => {
+                        feature.style.width = 'calc(50% - 20px)';
+                    });
+                    
+                } else if (peType === 'desktop') {
+                    peFrame.className = 'device-frame desktop-frame';
+                    peLabel.textContent = 'Desktop (Enhanced)';
+                    
+                    // Desktop styling
+                    peHeader.style.display = 'flex';
+                    peHeader.style.justifyContent = 'space-between';
+                    peHeader.style.alignItems = 'center';
+                    peHeader.style.padding = '20px';
+                    peHeader.querySelector('.logo').style.marginBottom = '0';
+                    peHeader.querySelector('nav').style.display = 'flex';
+                    peHeader.querySelector('nav').style.gap = '20px';
+                    
+                    peFeatures.style.flexDirection = 'row';
+                    peFeatures.style.flexWrap = 'wrap';
+                    Array.from(peFeatures.children).forEach(feature => {
+                        feature.style.width = 'calc(33.333% - 20px)';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

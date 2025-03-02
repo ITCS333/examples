@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Properties Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        h1, h2, h3 {
+            color: #0088a9;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .demo-container {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border: 2px dashed #0088a9;
+            border-radius: 4px;
+        }
+        
+        .flex-box {
+            display: flex;
+            min-height: 150px;
+            margin-bottom: 10px;
+        }
+        
+        .flex-item {
+            padding: 15px;
+            background-color: #0088a9;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        
+        .control-panel {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .property-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        button {
+            background-color: #0088a9;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #00677e;
+        }
+        
+        button.active {
+            background-color: #004d5e;
+        }
+        
+        .code-example {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .flex-grow-item {
+            background-color: #39c;
+        }
+        
+        .flex-grow-2 {
+            background-color: #3c9;
+        }
+        
+        .flex-shrink-demo .flex-item {
+            width: 150px;
+        }
+        
+        @media (max-width: 768px) {
+            .control-panel {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            
+            .control-group {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Flexbox Properties Demo</h1>
+    <p>An interactive demonstration of the flexbox layout model and its properties.</p>
+    
+    <!-- FLEX CONTAINER PROPERTIES -->
+    <div class="section">
+        <h2>Flex Container Properties</h2>
+        
+        <!-- flex-direction -->
+        <div class="demo-container">
+            <h3>flex-direction</h3>
+            <p>Specifies the direction of the main axis.</p>
+            
+            <div class="control-panel">
+                <span class="property-label">flex-direction:</span>
+                <button class="direction-btn active" data-direction="row">row</button>
+                <button class="direction-btn" data-direction="row-reverse">row-reverse</button>
+                <button class="direction-btn" data-direction="column">column</button>
+                <button class="direction-btn" data-direction="column-reverse">column-reverse</button>
+            </div>
+            
+            <div class="flex-box" id="direction-demo">
+                <div class="flex-item">1</div>
+                <div class="flex-item">2</div>
+                <div class="flex-item">3</div>
+                <div class="flex-item">4</div>
+            </div>
+            
+            <div class="code-example" id="direction-code">display: flex;
+flex-direction: row;</div>
+        </div>
+        
+        <!-- flex-wrap -->
+        <div class="demo-container">
+            <h3>flex-wrap</h3>
+            <p>Indicates whether new lines should be created if flex container can't contain all items.</p>
+            
+            <div class="control-panel">
+                <span class="property-label">flex-wrap:</span>
+                <button class="wrap-btn active" data-wrap="nowrap">nowrap</button>
+                <button class="wrap-btn" data-wrap="wrap">wrap</button>
+                <button class="wrap-btn" data-wrap="wrap-reverse">wrap-reverse</button>
+            </div>
+            
+            <div class="flex-box" id="wrap-demo" style="width: 100%;">
+                <div class="flex-item" style="width: 100px;">1</div>
+                <div class="flex-item" style="width: 100px;">2</div>
+                <div class="flex-item" style="width: 100px;">3</div>
+                <div class="flex-item" style="width: 100px;">4</div>
+                <div class="flex-item" style="width: 100px;">5</div>
+                <div class="flex-item" style="width: 100px;">6</div>
+                <div class="flex-item" style="width: 100px;">7</div>
+                <div class="flex-item" style="width: 100px;">8</div>
+            </div>
+            
+            <div class="code-example" id="wrap-code">display: flex;
+flex-wrap: nowrap;</div>
+        </div>
+        
+        <!-- justify-content -->
+        <div class="demo-container">
+            <h3>justify-content</h3>
+            <p>Controls flex item alignment along the main axis.</p>
+            
+            <div class="control-panel">
+                <span class="property-label">justify-content:</span>
+                <button class="justify-btn active" data-justify="flex-start">flex-start</button>
+                <button class="justify-btn" data-justify="flex-end">flex-end</button>
+                <button class="justify-btn" data-justify="center">center</button>
+                <button class="justify-btn" data-justify="space-between">space-between</button>
+                <button class="justify-btn" data-justify="space-around">space-around</button>
+                <button class="justify-btn" data-justify="space-evenly">space-evenly</button>
+            </div>
+            
+            <div class="flex-box" id="justify-demo">
+                <div class="flex-item">1</div>
+                <div class="flex-item">2</div>
+                <div class="flex-item">3</div>
+            </div>
+            
+            <div class="code-example" id="justify-code">display: flex;
+justify-content: flex-start;</div>
+        </div>
+        
+        <!-- align-items -->
+        <div class="demo-container">
+            <h3>align-items</h3>
+            <p>Controls flex item alignment along the cross axis.</p>
+            
+            <div class="control-panel">
+                <span class="property-label">align-items:</span>
+                <button class="align-btn active" data-align="stretch">stretch</button>
+                <button class="align-btn" data-align="flex-start">flex-start</button>
+                <button class="align-btn" data-align="flex-end">flex-end</button>
+                <button class="align-btn" data-align="center">center</button>
+                <button class="align-btn" data-align="baseline">baseline</button>
+            </div>
+            
+            <div class="flex-box" id="align-demo" style="height: 200px;">
+                <div class="flex-item">1</div>
+                <div class="flex-item" style="font-size: 24px;">2</div>
+                <div class="flex-item">3</div>
+            </div>
+            
+            <div class="code-example" id="align-code">display: flex;
+align-items: stretch;</div>
+        </div>
+    </div>
+    
+    <!-- FLEX ITEM PROPERTIES -->
+    <div class="section">
+        <h2>Flex Item Properties</h2>
+        
+        <!-- flex-basis -->
+        <div class="demo-container">
+            <h3>flex-basis</h3>
+            <p>Determines the initial size of the flex item before remaining space is distributed.</p>
+            
+            <div class="control-panel">
+                <div class="control-group">
+                    <span class="property-label">flex-basis (middle item):</span>
+                    <button class="basis-btn active" data-basis="auto">auto</button>
+                    <button class="basis-btn" data-basis="200px">200px</button>
+                    <button class="basis-btn" data-basis="50%">50%</button>
+                </div>
+            </div>
+            
+            <div class="flex-box" id="basis-demo">
+                <div class="flex-item">1</div>
+                <div class="flex-item" id="basis-item">2</div>
+                <div class="flex-item">3</div>
+            </div>
+            
+            <div class="code-example" id="basis-code">#basis-item {
+    flex-basis: auto;
+}</div>
+        </div>
+        
+        <!-- flex-grow -->
+        <div class="demo-container">
+            <h3>flex-grow</h3>
+            <p>Defines the growth factor of an element relative to other items.</p>
+            
+            <div class="control-panel">
+                <div>Item 1 - flex-grow: <span id="grow1-value">0</span></div>
+                <input type="range" min="0" max="3" value="0" class="grow-slider" id="grow1" data-item="1">
+                
+                <div>Item 2 - flex-grow: <span id="grow2-value">0</span></div>
+                <input type="range" min="0" max="3" value="0" class="grow-slider" id="grow2" data-item="2">
+                
+                <div>Item 3 - flex-grow: <span id="grow3-value">0</span></div>
+                <input type="range" min="0" max="3" value="0" class="grow-slider" id="grow3" data-item="3">
+            </div>
+            
+            <div class="flex-box" id="grow-demo">
+                <div class="flex-item" id="grow-item-1">1</div>
+                <div class="flex-item" id="grow-item-2">2</div>
+                <div class="flex-item" id="grow-item-3">3</div>
+            </div>
+            
+            <div class="code-example" id="grow-code">#grow-item-1 { flex-grow: 0; }
+#grow-item-2 { flex-grow: 0; }
+#grow-item-3 { flex-grow: 0; }</div>
+        </div>
+        
+        <!-- flex-shrink -->
+        <div class="demo-container">
+            <h3>flex-shrink</h3>
+            <p>Defines how much an item will shrink when not enough space in container.</p>
+            <p>Resize your browser window to see the effect.</p>
+            
+            <div class="control-panel">
+                <div>Item 1 - flex-shrink: <span id="shrink1-value">1</span></div>
+                <input type="range" min="0" max="3" value="1" class="shrink-slider" id="shrink1" data-item="1">
+                
+                <div>Item 2 - flex-shrink: <span id="shrink2-value">1</span></div>
+                <input type="range" min="0" max="3" value="1" class="shrink-slider" id="shrink2" data-item="2">
+                
+                <div>Item 3 - flex-shrink: <span id="shrink3-value">1</span></div>
+                <input type="range" min="0" max="3" value="1" class="shrink-slider" id="shrink3" data-item="3">
+            </div>
+            
+            <div class="flex-box flex-shrink-demo" id="shrink-demo">
+                <div class="flex-item" id="shrink-item-1">1</div>
+                <div class="flex-item" id="shrink-item-2">2</div>
+                <div class="flex-item" id="shrink-item-3">3</div>
+            </div>
+            
+            <div class="code-example" id="shrink-code">#shrink-item-1 { flex-shrink: 1; }
+#shrink-item-2 { flex-shrink: 1; }
+#shrink-item-3 { flex-shrink: 1; }</div>
+        </div>
+    </div>
+    
+    <script>
+        // flex-direction buttons
+        document.querySelectorAll('.direction-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.direction-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply direction
+                const direction = button.getAttribute('data-direction');
+                document.getElementById('direction-demo').style.flexDirection = direction;
+                
+                // Update code example
+                document.getElementById('direction-code').textContent = `display: flex;\nflex-direction: ${direction};`;
+            });
+        });
+        
+        // flex-wrap buttons
+        document.querySelectorAll('.wrap-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.wrap-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply wrap
+                const wrap = button.getAttribute('data-wrap');
+                document.getElementById('wrap-demo').style.flexWrap = wrap;
+                
+                // Update code example
+                document.getElementById('wrap-code').textContent = `display: flex;\nflex-wrap: ${wrap};`;
+            });
+        });
+        
+        // justify-content buttons
+        document.querySelectorAll('.justify-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.justify-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply justify content
+                const justify = button.getAttribute('data-justify');
+                document.getElementById('justify-demo').style.justifyContent = justify;
+                
+                // Update code example
+                document.getElementById('justify-code').textContent = `display: flex;\njustify-content: ${justify};`;
+            });
+        });
+        
+        // align-items buttons
+        document.querySelectorAll('.align-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.align-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply align items
+                const align = button.getAttribute('data-align');
+                document.getElementById('align-demo').style.alignItems = align;
+                
+                // Update code example
+                document.getElementById('align-code').textContent = `display: flex;\nalign-items: ${align};`;
+            });
+        });
+        
+        // flex-basis buttons
+        document.querySelectorAll('.basis-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.basis-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply basis
+                const basis = button.getAttribute('data-basis');
+                document.getElementById('basis-item').style.flexBasis = basis;
+                
+                // Update code example
+                document.getElementById('basis-code').textContent = `#basis-item {\n    flex-basis: ${basis};\n}`;
+            });
+        });
+        
+        // flex-grow sliders
+        document.querySelectorAll('.grow-slider').forEach(slider => {
+            slider.addEventListener('input', () => {
+                const itemNum = slider.getAttribute('data-item');
+                const value = slider.value;
+                
+                // Update value display
+                document.getElementById(`grow${itemNum}-value`).textContent = value;
+                
+                // Apply flex-grow
+                document.getElementById(`grow-item-${itemNum}`).style.flexGrow = value;
+                
+                // Update code example
+                updateGrowCode();
+            });
+        });
+        
+        function updateGrowCode() {
+            const grow1 = document.getElementById('grow1').value;
+            const grow2 = document.getElementById('grow2').value;
+            const grow3 = document.getElementById('grow3').value;
+            
+            document.getElementById('grow-code').textContent = 
+`#grow-item-1 { flex-grow: ${grow1}; }
+#grow-item-2 { flex-grow: ${grow2}; }
+#grow-item-3 { flex-grow: ${grow3}; }`;
+        }
+        
+        // flex-shrink sliders
+        document.querySelectorAll('.shrink-slider').forEach(slider => {
+            slider.addEventListener('input', () => {
+                const itemNum = slider.getAttribute('data-item');
+                const value = slider.value;
+                
+                // Update value display
+                document.getElementById(`shrink${itemNum}-value`).textContent = value;
+                
+                // Apply flex-shrink
+                document.getElementById(`shrink-item-${itemNum}`).style.flexShrink = value;
+                
+                // Update code example
+                updateShrinkCode();
+            });
+        });
+        
+        function updateShrinkCode() {
+            const shrink1 = document.getElementById('shrink1').value;
+            const shrink2 = document.getElementById('shrink2').value;
+            const shrink3 = document.getElementById('shrink3').value;
+            
+            document.getElementById('shrink-code').textContent = 
+`#shrink-item-1 { flex-shrink: ${shrink1}; }
+#shrink-item-2 { flex-shrink: ${shrink2}; }
+#shrink-item-3 { flex-shrink: ${shrink3}; }`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Grid Layout Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        h1, h2, h3 {
+            color: #0088a9;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .demo-container {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border: 2px dashed #0088a9;
+            border-radius: 4px;
+        }
+        
+        .grid-demo {
+            display: grid;
+            gap: 10px;
+            min-height: 200px;
+            margin-bottom: 20px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .grid-item {
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            background-color: #0088a9;
+            color: white;
+        }
+        
+        .control-panel {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .property-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        button {
+            background-color: #0088a9;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #00677e;
+        }
+        
+        button.active {
+            background-color: #004d5e;
+        }
+        
+        .code-example {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        /* Explicit grid area example */
+        .grid-area-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        /* Grid Areas Demo */
+        .grid-template-areas-demo {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto auto;
+            gap: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .grid-template-areas-demo .header {
+            grid-area: header;
+            background-color: #0088a9;
+        }
+        
+        .grid-template-areas-demo .sidebar {
+            grid-area: sidebar;
+            background-color: #00acc1;
+        }
+        
+        .grid-template-areas-demo .content {
+            grid-area: content;
+            background-color: #00bcd4;
+        }
+        
+        .grid-template-areas-demo .footer {
+            grid-area: footer;
+            background-color: #26c6da;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Grid Layout Demo</h1>
+    <p>An interactive demonstration of CSS Grid Layout properties and features.</p>
+    
+    <!-- Grid Template Columns -->
+    <div class="section">
+        <h2>Grid Structure: Template Columns</h2>
+        <p>Define column sizes using <code>grid-template-columns</code>.</p>
+        
+        <div class="demo-container">
+            <div class="control-panel">
+                <span class="property-label">grid-template-columns:</span>
+                <button class="columns-btn active" data-columns="1fr 1fr 1fr">1fr 1fr 1fr</button>
+                <button class="columns-btn" data-columns="200px 1fr 1fr">200px 1fr 1fr</button>
+                <button class="columns-btn" data-columns="repeat(3, 1fr)">repeat(3, 1fr)</button>
+                <button class="columns-btn" data-columns="1fr 2fr 1fr">1fr 2fr 1fr</button>
+                <button class="columns-btn" data-columns="minmax(100px, 1fr) 2fr 1fr">minmax(100px, 1fr) 2fr 1fr</button>
+            </div>
+            
+            <div class="grid-demo" id="columns-demo">
+                <div class="grid-item">1</div>
+                <div class="grid-item">2</div>
+                <div class="grid-item">3</div>
+            </div>
+            
+            <div class="code-example" id="columns-code">display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 10px;</div>
+        </div>
+    </div>
+    
+    <!-- Grid Template Rows -->
+    <div class="section">
+        <h2>Grid Structure: Template Rows</h2>
+        <p>Define row sizes using <code>grid-template-rows</code>.</p>
+        
+        <div class="demo-container">
+            <div class="control-panel">
+                <span class="property-label">grid-template-rows:</span>
+                <button class="rows-btn active" data-rows="auto">auto</button>
+                <button class="rows-btn" data-rows="100px 200px">100px 200px</button>
+                <button class="rows-btn" data-rows="repeat(2, 100px)">repeat(2, 100px)</button>
+                <button class="rows-btn" data-rows="minmax(50px, auto) 100px">minmax(50px, auto) 100px</button>
+            </div>
+            
+            <div class="grid-demo" id="rows-demo">
+                <div class="grid-item">1</div>
+                <div class="grid-item">2</div>
+                <div class="grid-item">3</div>
+                <div class="grid-item">4</div>
+                <div class="grid-item">5</div>
+                <div class="grid-item">6</div>
+            </div>
+            
+            <div class="code-example" id="rows-code">display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+grid-template-rows: auto;
+gap: 10px;</div>
+        </div>
+    </div>
+    
+    <!-- Auto-fill and Auto-fit -->
+    <div class="section">
+        <h2>Responsive Grid: auto-fill and auto-fit</h2>
+        <p>Create responsive grids using <code>repeat(auto-fill, ...)</code> and <code>repeat(auto-fit, ...)</code>.</p>
+        
+        <div class="demo-container">
+            <div class="control-panel">
+                <span class="property-label">Type:</span>
+                <button class="auto-btn active" data-auto="auto-fill">auto-fill</button>
+                <button class="auto-btn" data-auto="auto-fit">auto-fit</button>
+            </div>
+            
+            <div class="grid-demo" id="auto-demo">
+                <div class="grid-item">1</div>
+                <div class="grid-item">2</div>
+                <div class="grid-item">3</div>
+                <div class="grid-item">4</div>
+                <div class="grid-item">5</div>
+            </div>
+            
+            <div class="code-example" id="auto-code">display: grid;
+grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+gap: 10px;</div>
+            
+            <p><strong>Note:</strong> Resize the browser window to see the difference. <code>auto-fill</code> keeps creating empty tracks, while <code>auto-fit</code> collapses empty tracks.</p>
+        </div>
+    </div>
+    
+    <!-- Grid Item Placement -->
+    <div class="section">
+        <h2>Grid Item Placement</h2>
+        <p>Control the position and span of grid items using <code>grid-column</code> and <code>grid-row</code>.</p>
+        
+        <div class="demo-container">
+            <div class="grid-area-demo" id="placement-demo">
+                <div class="grid-item" id="item-a">A</div>
+                <div class="grid-item" id="item-b">B</div>
+                <div class="grid-item" id="item-c">C</div>
+                <div class="grid-item" id="item-d">D</div>
+                <div class="grid-item" id="item-e">E</div>
+            </div>
+            
+            <div class="control-panel">
+                <p>Modify the placement of item "A":</p>
+                <div>
+                    <span class="property-label">grid-column:</span>
+                    <button class="col-btn active" data-col="auto">auto</button>
+                    <button class="col-btn" data-col="1 / 3">1 / 3</button>
+                    <button class="col-btn" data-col="2 / span 2">2 / span 2</button>
+                    <button class="col-btn" data-col="1 / -1">1 / -1</button>
+                </div>
+                <div>
+                    <span class="property-label">grid-row:</span>
+                    <button class="row-btn active" data-row="auto">auto</button>
+                    <button class="row-btn" data-row="1 / 3">1 / 3</button>
+                    <button class="row-btn" data-row="2 / span 2">2 / span 2</button>
+                </div>
+            </div>
+            
+            <div class="code-example" id="placement-code">/* Grid container */
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: repeat(2, auto);
+gap: 10px;
+
+/* Item A */
+#item-a {
+    grid-column: auto;
+    grid-row: auto;
+}</div>
+        </div>
+    </div>
+    
+    <!-- Grid Template Areas -->
+    <div class="section">
+        <h2>Grid Template Areas</h2>
+        <p>Create layout templates using named grid areas with <code>grid-template-areas</code>.</p>
+        
+        <div class="demo-container">
+            <div class="control-panel">
+                <span class="property-label">Layout:</span>
+                <button class="area-btn active" data-area="standard">Standard Layout</button>
+                <button class="area-btn" data-area="sidebar-right">Sidebar Right</button>
+                <button class="area-btn" data-area="stack">Stacked Layout</button>
+            </div>
+            
+            <div class="grid-template-areas-demo" id="areas-demo">
+                <div class="grid-item header">Header</div>
+                <div class="grid-item sidebar">Sidebar</div>
+                <div class="grid-item content">Main Content</div>
+                <div class="grid-item footer">Footer</div>
+            </div>
+            
+            <div class="code-example" id="areas-code">display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-template-rows: auto auto auto;
+grid-template-areas: 
+    "header header header header"
+    "sidebar content content content"
+    "footer footer footer footer";
+gap: 10px;</div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize the grid demos when the page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            // Set initial column template
+            document.getElementById('columns-demo').style.gridTemplateColumns = "1fr 1fr 1fr";
+            
+            // Set initial row template with columns
+            const rowsDemo = document.getElementById('rows-demo');
+            rowsDemo.style.gridTemplateColumns = "1fr 1fr 1fr";
+            rowsDemo.style.gridTemplateRows = "auto";
+            
+            // Set initial auto-fill
+            document.getElementById('auto-demo').style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
+            
+            // Initialize the grid areas
+            document.getElementById('areas-demo').style.gridTemplateAreas = `
+                "header header header header"
+                "sidebar content content content"
+                "footer footer footer footer"
+            `;
+        });
+        
+        // Grid Template Columns
+        document.querySelectorAll('.columns-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.columns-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply columns
+                const columns = button.getAttribute('data-columns');
+                document.getElementById('columns-demo').style.gridTemplateColumns = columns;
+                
+                // Update code example
+                document.getElementById('columns-code').textContent = `display: grid;
+grid-template-columns: ${columns};
+gap: 10px;`;
+            });
+        });
+        
+        // Grid Template Rows
+        document.querySelectorAll('.rows-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.rows-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply rows
+                const rows = button.getAttribute('data-rows');
+                document.getElementById('rows-demo').style.gridTemplateRows = rows;
+                
+                // Update code example
+                document.getElementById('rows-code').textContent = `display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+grid-template-rows: ${rows};
+gap: 10px;`;
+            });
+        });
+        
+        // Auto-fill and Auto-fit
+        document.querySelectorAll('.auto-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.auto-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply auto-fill or auto-fit
+                const autoType = button.getAttribute('data-auto');
+                document.getElementById('auto-demo').style.gridTemplateColumns = `repeat(${autoType}, minmax(150px, 1fr))`;
+                
+                // Update code example
+                document.getElementById('auto-code').textContent = `display: grid;
+grid-template-columns: repeat(${autoType}, minmax(150px, 1fr));
+gap: 10px;`;
+            });
+        });
+        
+        // Grid Item Placement - Column
+        document.querySelectorAll('.col-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.col-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply grid-column
+                const col = button.getAttribute('data-col');
+                document.getElementById('item-a').style.gridColumn = col;
+                
+                updatePlacementCode();
+            });
+        });
+        
+        // Grid Item Placement - Row
+        document.querySelectorAll('.row-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.row-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply grid-row
+                const row = button.getAttribute('data-row');
+                document.getElementById('item-a').style.gridRow = row;
+                
+                updatePlacementCode();
+            });
+        });
+        
+        function updatePlacementCode() {
+            const col = document.querySelector('.col-btn.active').getAttribute('data-col');
+            const row = document.querySelector('.row-btn.active').getAttribute('data-row');
+            
+            document.getElementById('placement-code').textContent = `/* Grid container */
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: repeat(2, auto);
+gap: 10px;
+
+/* Item A */
+#item-a {
+    grid-column: ${col};
+    grid-row: ${row};
+}`;
+        }
+        
+        // Grid Template Areas
+        document.querySelectorAll('.area-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.area-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply grid-template-areas
+                const areaType = button.getAttribute('data-area');
+                const areasDemo = document.getElementById('areas-demo');
+                let templateAreas = '';
+                let codeExample = '';
+                
+                if (areaType === 'standard') {
+                    templateAreas = `
+                        "header header header header"
+                        "sidebar content content content"
+                        "footer footer footer footer"
+                    `;
+                    areasDemo.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
+                    codeExample = `display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-template-rows: auto auto auto;
+grid-template-areas: 
+    "header header header header"
+    "sidebar content content content"
+    "footer footer footer footer";
+gap: 10px;`;
+                } else if (areaType === 'sidebar-right') {
+                    templateAreas = `
+                        "header header header header"
+                        "content content content sidebar"
+                        "footer footer footer footer"
+                    `;
+                    areasDemo.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
+                    codeExample = `display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-template-rows: auto auto auto;
+grid-template-areas: 
+    "header header header header"
+    "content content content sidebar"
+    "footer footer footer footer";
+gap: 10px;`;
+                } else if (areaType === 'stack') {
+                    templateAreas = `
+                        "header"
+                        "sidebar"
+                        "content"
+                        "footer"
+                    `;
+                    areasDemo.style.gridTemplateColumns = "1fr";
+                    codeExample = `display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: auto auto auto auto;
+grid-template-areas: 
+    "header"
+    "sidebar"
+    "content"
+    "footer";
+gap: 10px;`;
+                }
+                
+                areasDemo.style.gridTemplateAreas = templateAreas;
+                document.getElementById('areas-code').textContent = codeExample;
+            });
+        });
+    </script>
+</body>
+</html>

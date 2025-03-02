@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="position.css">
+    <title>CSS Positioning Demo</title>
+</head>
+<body>
+    <header>
+        <h1>CSS Positioning Elements</h1>
+        <p>Scroll down to see demonstrations of different positioning methods</p>
+    </header>
+
+    <main>
+        <section class="section">
+            <h2>Static Positioning (Default)</h2>
+            <p>Elements with <code>position: static</code> follow the normal document flow. This is the default positioning for all HTML elements.</p>
+            
+            <div class="demo-container">
+                <div class="normal-flow">This is in the normal flow.</div>
+                <div class="box static-box">Static</div>
+                <div class="normal-flow">This is also in the normal flow.</div>
+            </div>
+            
+            <div class="code-block">
+.static-box {
+    position: static;
+    /* The element follows normal document flow */
+}
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Relative Positioning</h2>
+            <p>Elements with <code>position: relative</code> are positioned relative to their normal position in the document flow.</p>
+            
+            <div class="demo-container">
+                <div class="normal-flow">This is in the normal flow.</div>
+                <div class="box relative-box">Relative</div>
+                <div class="normal-flow">This is also in the normal flow.</div>
+            </div>
+            
+            <div class="code-block">
+.relative-box {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    /* Offset from its normal position */
+}
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Absolute Positioning</h2>
+            <p>Elements with <code>position: absolute</code> are removed from the normal document flow and positioned relative to their nearest positioned ancestor.</p>
+            
+            <div class="demo-container">
+                <div class="normal-flow">This is in the normal flow.</div>
+                <div class="box absolute-box">Absolute</div>
+                <div class="normal-flow">The absolute box doesn't affect this element's position.</div>
+            </div>
+            
+            <div class="code-block">
+.absolute-box {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    /* Positioned relative to nearest positioned ancestor */
+}
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Fixed Positioning</h2>
+            <p>Elements with <code>position: fixed</code> are removed from the normal document flow and positioned relative to the viewport. They stay in the same position even when the page is scrolled.</p>
+            
+            <div class="fixed-demo">
+                <div class="normal-flow">Try scrolling this section...</div>
+                <div style="height: 1000px; background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);">
+                    <div style="padding: 20px;">Scroll content...</div>
+                </div>
+                <div class="box fixed-box">Fixed</div>
+            </div>
+            
+            <div class="code-block">
+.fixed-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    /* Always stays in the same position regardless of scroll */
+}
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Sticky Positioning</h2>
+            <p>Elements with <code>position: sticky</code> are positioned based on the user's scroll position. They act like <code>relative</code> until a specified scroll position is met, then act like <code>fixed</code>.</p>
+            
+            <div class="sticky-container">
+                <div class="sticky-content">
+                    <div class="sticky-box">Sticky Header - Scroll to see the effect</div>
+                    <p>Scroll within this container to see the sticky effect...</p>
+                    <div style="height: 200px;"></div>
+                    <p>The sticky header should stay at the top when scrolling.</p>
+                    <div style="height: 200px;"></div>
+                    <p>Continue scrolling to see how it works!</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+.sticky-box {
+    position: sticky;
+    top: 0;
+    /* Acts like relative positioning until the scroll position is reached */
+    /* Then acts like fixed positioning */
+}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>This demonstration shows the different CSS positioning properties: static, relative, absolute, fixed, and sticky.</p>
+    </footer>
+</body>
+</html>
