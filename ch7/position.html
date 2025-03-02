@@ -1,15 +1,207 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="position.css">
-    <title>CSS Positioning Demo</title>
+    <title>Interactive CSS Positioning Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        header {
+            background-color: #0088a9;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .section {
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        h1, h2 {
+            margin-top: 0;
+        }
+        
+        .demo-container {
+            background-color: #f5f5f5;
+            border: 2px dashed #ccc;
+            height: 300px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: auto;
+        }
+        
+        .box {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .static-box {
+            background-color: #3498db;
+            position: static;
+        }
+        
+        .relative-box {
+            background-color: #e74c3c;
+            position: relative;
+        }
+        
+        .absolute-box {
+            background-color: #2ecc71;
+            position: absolute;
+        }
+        
+        .fixed-demo {
+            position: relative;
+            height: 400px;
+            overflow: auto;
+        }
+        
+        .fixed-box {
+            background-color: #9b59b6;
+            position: fixed;
+        }
+        
+        .sticky-container {
+            height: 300px;
+            overflow: auto;
+            border: 2px dashed #ccc;
+            position: relative;
+        }
+        
+        .sticky-content {
+            height: 600px;
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            padding: 10px;
+        }
+        
+        .sticky-box {
+            background-color: #f39c12;
+            position: sticky;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        
+        .normal-flow {
+            padding: 10px;
+            background-color: #ecf0f1;
+            margin: 10px 0;
+        }
+        
+        .code-block {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 10px 0;
+        }
+        
+        .control-panel {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .slider-container {
+            margin: 10px 0;
+        }
+        
+        .slider-container label {
+            display: inline-block;
+            width: 80px;
+            font-weight: bold;
+        }
+        
+        .slider {
+            width: 200px;
+            margin: 0 10px;
+        }
+        
+        .value-display {
+            display: inline-block;
+            width: 60px;
+            text-align: right;
+        }
+        
+        .checkbox-container {
+            margin: 10px 0;
+        }
+        
+        button {
+            background-color: #0088a9;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #006680;
+        }
+        
+        button.active {
+            background-color: #004d5e;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 600px) {
+            .section {
+                padding: 1rem;
+            }
+            
+            .box {
+                width: 80px;
+                height: 80px;
+                font-size: 14px;
+            }
+            
+            .slider {
+                width: 120px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>CSS Positioning Elements</h1>
-        <p>Scroll down to see demonstrations of different positioning methods</p>
+        <h1>Interactive CSS Positioning</h1>
+        <p>Adjust controls to see how different positioning methods work</p>
     </header>
 
     <main>
@@ -17,13 +209,17 @@
             <h2>Static Positioning (Default)</h2>
             <p>Elements with <code>position: static</code> follow the normal document flow. This is the default positioning for all HTML elements.</p>
             
+            <div class="control-panel">
+                <p><strong>Note:</strong> Static positioning cannot be adjusted with top, right, bottom, or left properties.</p>
+            </div>
+            
             <div class="demo-container">
                 <div class="normal-flow">This is in the normal flow.</div>
-                <div class="box static-box">Static</div>
+                <div class="box static-box" id="static-box">Static</div>
                 <div class="normal-flow">This is also in the normal flow.</div>
             </div>
             
-            <div class="code-block">
+            <div class="code-block" id="static-code">
 .static-box {
     position: static;
     /* The element follows normal document flow */
@@ -35,13 +231,27 @@
             <h2>Relative Positioning</h2>
             <p>Elements with <code>position: relative</code> are positioned relative to their normal position in the document flow.</p>
             
+            <div class="control-panel">
+                <div class="slider-container">
+                    <label for="relative-top">Top:</label>
+                    <input type="range" id="relative-top" class="slider" min="-50" max="100" value="20">
+                    <span class="value-display" id="relative-top-value">20px</span>
+                </div>
+                <div class="slider-container">
+                    <label for="relative-left">Left:</label>
+                    <input type="range" id="relative-left" class="slider" min="-50" max="100" value="20">
+                    <span class="value-display" id="relative-left-value">20px</span>
+                </div>
+                <button id="reset-relative">Reset</button>
+            </div>
+            
             <div class="demo-container">
                 <div class="normal-flow">This is in the normal flow.</div>
-                <div class="box relative-box">Relative</div>
+                <div class="box relative-box" id="relative-box">Relative</div>
                 <div class="normal-flow">This is also in the normal flow.</div>
             </div>
             
-            <div class="code-block">
+            <div class="code-block" id="relative-code">
 .relative-box {
     position: relative;
     top: 20px;
@@ -55,13 +265,32 @@
             <h2>Absolute Positioning</h2>
             <p>Elements with <code>position: absolute</code> are removed from the normal document flow and positioned relative to their nearest positioned ancestor.</p>
             
+            <div class="control-panel">
+                <div class="slider-container">
+                    <label for="absolute-top">Top:</label>
+                    <input type="range" id="absolute-top" class="slider" min="0" max="200" value="40">
+                    <span class="value-display" id="absolute-top-value">40px</span>
+                </div>
+                <div class="slider-container">
+                    <label for="absolute-right">Right:</label>
+                    <input type="range" id="absolute-right" class="slider" min="0" max="200" value="40">
+                    <span class="value-display" id="absolute-right-value">40px</span>
+                </div>
+                <div class="checkbox-container">
+                    <label>Position from:</label>
+                    <button class="position-btn active" data-position="right">Right</button>
+                    <button class="position-btn" data-position="left">Left</button>
+                </div>
+                <button id="reset-absolute">Reset</button>
+            </div>
+            
             <div class="demo-container">
                 <div class="normal-flow">This is in the normal flow.</div>
-                <div class="box absolute-box">Absolute</div>
+                <div class="box absolute-box" id="absolute-box">Absolute</div>
                 <div class="normal-flow">The absolute box doesn't affect this element's position.</div>
             </div>
             
-            <div class="code-block">
+            <div class="code-block" id="absolute-code">
 .absolute-box {
     position: absolute;
     top: 40px;
@@ -75,15 +304,29 @@
             <h2>Fixed Positioning</h2>
             <p>Elements with <code>position: fixed</code> are removed from the normal document flow and positioned relative to the viewport. They stay in the same position even when the page is scrolled.</p>
             
+            <div class="control-panel">
+                <div class="slider-container">
+                    <label for="fixed-bottom">Bottom:</label>
+                    <input type="range" id="fixed-bottom" class="slider" min="0" max="100" value="20">
+                    <span class="value-display" id="fixed-bottom-value">20px</span>
+                </div>
+                <div class="slider-container">
+                    <label for="fixed-right">Right:</label>
+                    <input type="range" id="fixed-right" class="slider" min="0" max="100" value="20">
+                    <span class="value-display" id="fixed-right-value">20px</span>
+                </div>
+                <button id="reset-fixed">Reset</button>
+            </div>
+            
             <div class="fixed-demo">
                 <div class="normal-flow">Try scrolling this section...</div>
                 <div style="height: 1000px; background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);">
                     <div style="padding: 20px;">Scroll content...</div>
                 </div>
-                <div class="box fixed-box">Fixed</div>
+                <div class="box fixed-box" id="fixed-box">Fixed</div>
             </div>
             
-            <div class="code-block">
+            <div class="code-block" id="fixed-code">
 .fixed-box {
     position: fixed;
     bottom: 20px;
@@ -97,9 +340,18 @@
             <h2>Sticky Positioning</h2>
             <p>Elements with <code>position: sticky</code> are positioned based on the user's scroll position. They act like <code>relative</code> until a specified scroll position is met, then act like <code>fixed</code>.</p>
             
+            <div class="control-panel">
+                <div class="slider-container">
+                    <label for="sticky-top">Top:</label>
+                    <input type="range" id="sticky-top" class="slider" min="0" max="50" value="0">
+                    <span class="value-display" id="sticky-top-value">0px</span>
+                </div>
+                <button id="reset-sticky">Reset</button>
+            </div>
+            
             <div class="sticky-container">
                 <div class="sticky-content">
-                    <div class="sticky-box">Sticky Header - Scroll to see the effect</div>
+                    <div class="sticky-box" id="sticky-box">Sticky Header - Scroll to see the effect</div>
                     <p>Scroll within this container to see the sticky effect...</p>
                     <div style="height: 200px;"></div>
                     <p>The sticky header should stay at the top when scrolling.</p>
@@ -108,10 +360,10 @@
                 </div>
             </div>
             
-            <div class="code-block">
+            <div class="code-block" id="sticky-code">
 .sticky-box {
     position: sticky;
-    top: 0;
+    top: 0px;
     /* Acts like relative positioning until the scroll position is reached */
     /* Then acts like fixed positioning */
 }
@@ -120,7 +372,230 @@
     </main>
 
     <footer>
-        <p>This demonstration shows the different CSS positioning properties: static, relative, absolute, fixed, and sticky.</p>
+        <p>This interactive demonstration shows the different CSS positioning properties: static, relative, absolute, fixed, and sticky.</p>
     </footer>
+
+    <script>
+        // Static positioning
+        document.getElementById('reset-static').addEventListener('click', function() {
+            const staticBox = document.getElementById('static-box');
+            staticBox.style.top = '';
+            staticBox.style.left = '';
+            
+            updateCode('static');
+        });
+        
+        // Relative positioning
+        const relativeTop = document.getElementById('relative-top');
+        const relativeLeft = document.getElementById('relative-left');
+        const relativeBox = document.getElementById('relative-box');
+        
+        relativeTop.addEventListener('input', function() {
+            updateRelative();
+        });
+        
+        relativeLeft.addEventListener('input', function() {
+            updateRelative();
+        });
+        
+        document.getElementById('reset-relative').addEventListener('click', function() {
+            relativeTop.value = 20;
+            relativeLeft.value = 20;
+            updateRelative();
+        });
+        
+        function updateRelative() {
+            const topValue = relativeTop.value;
+            const leftValue = relativeLeft.value;
+            
+            document.getElementById('relative-top-value').textContent = `${topValue}px`;
+            document.getElementById('relative-left-value').textContent = `${leftValue}px`;
+            
+            relativeBox.style.top = `${topValue}px`;
+            relativeBox.style.left = `${leftValue}px`;
+            
+            updateCode('relative');
+        }
+        
+        // Absolute positioning
+        const absoluteTop = document.getElementById('absolute-top');
+        const absoluteRight = document.getElementById('absolute-right');
+        const absoluteBox = document.getElementById('absolute-box');
+        let absolutePosition = 'right';
+        
+        absoluteTop.addEventListener('input', function() {
+            updateAbsolute();
+        });
+        
+        absoluteRight.addEventListener('input', function() {
+            updateAbsolute();
+        });
+        
+        document.querySelectorAll('.position-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.position-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                absolutePosition = this.getAttribute('data-position');
+                updateAbsolute();
+            });
+        });
+        
+        document.getElementById('reset-absolute').addEventListener('click', function() {
+            absoluteTop.value = 40;
+            absoluteRight.value = 40;
+            
+            document.querySelectorAll('.position-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-position') === 'right') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            absolutePosition = 'right';
+            updateAbsolute();
+        });
+        
+        function updateAbsolute() {
+            const topValue = absoluteTop.value;
+            const sideValue = absoluteRight.value;
+            
+            document.getElementById('absolute-top-value').textContent = `${topValue}px`;
+            document.getElementById('absolute-right-value').textContent = `${sideValue}px`;
+            
+            absoluteBox.style.top = `${topValue}px`;
+            
+            if (absolutePosition === 'right') {
+                absoluteBox.style.right = `${sideValue}px`;
+                absoluteBox.style.left = '';
+                document.querySelector('label[for="absolute-right"]').textContent = 'Right:';
+            } else {
+                absoluteBox.style.left = `${sideValue}px`;
+                absoluteBox.style.right = '';
+                document.querySelector('label[for="absolute-right"]').textContent = 'Left:';
+            }
+            
+            updateCode('absolute');
+        }
+        
+        // Fixed positioning
+        const fixedBottom = document.getElementById('fixed-bottom');
+        const fixedRight = document.getElementById('fixed-right');
+        const fixedBox = document.getElementById('fixed-box');
+        
+        fixedBottom.addEventListener('input', function() {
+            updateFixed();
+        });
+        
+        fixedRight.addEventListener('input', function() {
+            updateFixed();
+        });
+        
+        document.getElementById('reset-fixed').addEventListener('click', function() {
+            fixedBottom.value = 20;
+            fixedRight.value = 20;
+            updateFixed();
+        });
+        
+        function updateFixed() {
+            const bottomValue = fixedBottom.value;
+            const rightValue = fixedRight.value;
+            
+            document.getElementById('fixed-bottom-value').textContent = `${bottomValue}px`;
+            document.getElementById('fixed-right-value').textContent = `${rightValue}px`;
+            
+            fixedBox.style.bottom = `${bottomValue}px`;
+            fixedBox.style.right = `${rightValue}px`;
+            
+            updateCode('fixed');
+        }
+        
+        // Sticky positioning
+        const stickyTop = document.getElementById('sticky-top');
+        const stickyBox = document.getElementById('sticky-box');
+        
+        stickyTop.addEventListener('input', function() {
+            updateSticky();
+        });
+        
+        document.getElementById('reset-sticky').addEventListener('click', function() {
+            stickyTop.value = 0;
+            updateSticky();
+        });
+        
+        function updateSticky() {
+            const topValue = stickyTop.value;
+            
+            document.getElementById('sticky-top-value').textContent = `${topValue}px`;
+            
+            stickyBox.style.top = `${topValue}px`;
+            
+            updateCode('sticky');
+        }
+        
+        // Update code blocks
+        function updateCode(type) {
+            switch (type) {
+                case 'static':
+                    document.getElementById('static-code').innerHTML = 
+`.static-box {
+    position: static;
+    /* The element follows normal document flow */
+}`;
+                    break;
+                    
+                case 'relative':
+                    document.getElementById('relative-code').innerHTML = 
+`.relative-box {
+    position: relative;
+    top: ${relativeBox.style.top};
+    left: ${relativeBox.style.left};
+    /* Offset from its normal position */
+}`;
+                    break;
+                    
+                case 'absolute':
+                    let absoluteSide = absolutePosition === 'right' ? 'right' : 'left';
+                    let absoluteValue = absolutePosition === 'right' ? absoluteBox.style.right : absoluteBox.style.left;
+                    
+                    document.getElementById('absolute-code').innerHTML = 
+`.absolute-box {
+    position: absolute;
+    top: ${absoluteBox.style.top};
+    ${absoluteSide}: ${absoluteValue};
+    /* Positioned relative to nearest positioned ancestor */
+}`;
+                    break;
+                    
+                case 'fixed':
+                    document.getElementById('fixed-code').innerHTML = 
+`.fixed-box {
+    position: fixed;
+    bottom: ${fixedBox.style.bottom};
+    right: ${fixedBox.style.right};
+    /* Always stays in the same position regardless of scroll */
+}`;
+                    break;
+                    
+                case 'sticky':
+                    document.getElementById('sticky-code').innerHTML = 
+`.sticky-box {
+    position: sticky;
+    top: ${stickyBox.style.top};
+    /* Acts like relative positioning until the scroll position is reached */
+    /* Then acts like fixed positioning */
+}`;
+                    break;
+            }
+        }
+        
+        // Initialize all demos
+        updateRelative();
+        updateAbsolute();
+        updateFixed();
+        updateSticky();
+    </script>
 </body>
 </html>
