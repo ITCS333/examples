@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Layout Demo</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --border-radius: 6px;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .layout-switcher {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .layout-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .layout-btn {
+            padding: 10px 15px;
+            background-color: var(--light-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .layout-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .layout-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Main content area */
+        .content-area {
+            display: grid;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        /* Component styling */
+        .component {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .component-header {
+            border-bottom: 1px solid var(--light-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Elements List styling */
+        .elements-list {
+            list-style: none;
+        }
+
+        .elements-list li {
+            padding: 10px;
+            border-bottom: 1px solid var(--light-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .elements-list li:hover {
+            background-color: var(--light-color);
+        }
+
+        .elements-list li.active {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        /* Add Form styling */
+        .add-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Details View styling */
+        .details-content {
+            display: grid;
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            min-width: 100px;
+            margin-right: 10px;
+        }
+
+        .detail-value {
+            flex: 1;
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .edit-btn {
+            background-color: var(--primary-color);
+        }
+
+        .delete-btn {
+            background-color: var(--accent-color);
+        }
+
+        /* Layout-specific styles - now applied to the container instead of body */
+        
+        /* Standard Layout - default */
+        .container.layout-standard .content-area {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Left Sidebar Layout */
+        .container.layout-left-sidebar .content-area {
+            grid-template-columns: 300px 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .container.layout-left-sidebar .elements-container {
+            grid-row: span 2;
+        }
+
+        /* Right Sidebar Layout - IMPROVED */
+        .container.layout-right-sidebar .content-area {
+            grid-template-columns: 1fr 350px;
+            grid-template-areas: 
+                "list sidebar"
+                "form sidebar";
+            gap: 20px;
+        }
+
+        .container.layout-right-sidebar .elements-container {
+            grid-area: list;
+        }
+
+        .container.layout-right-sidebar .form-container {
+            grid-area: form;
+        }
+
+        .container.layout-right-sidebar .details-container {
+            grid-area: sidebar;
+            align-self: start;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            box-shadow: var(--shadow);
+            height: 100%;
+        }
+
+        .container.layout-right-sidebar .details-container .component-header {
+            background-color: var(--primary-color);
+            color: white;
+            margin: -20px -20px 20px -20px;
+            padding: 15px 20px;
+            border-radius: 0 var(--border-radius) 0 0;
+        }
+
+        /* Stacked Layout */
+        .container.layout-stacked .content-area {
+            grid-template-columns: 1fr;
+        }
+
+        /* Dashboard Layout */
+        .container.layout-dashboard .content-area {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: auto 1fr;
+        }
+
+        .container.layout-dashboard .elements-container {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+        }
+
+        .container.layout-dashboard .form-container {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .container.layout-dashboard .details-container {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        /* Tab Layout */
+        .container.layout-tabs .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .tab-navigation {
+            display: flex;
+            background-color: var(--light-color);
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .tab-button {
+            padding: 15px 20px;
+            background-color: var(--light-color);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            flex: 1;
+            text-align: center;
+        }
+
+        .tab-button:hover {
+            background-color: #d1d8e0;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            font-weight: bold;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            min-height: 500px;
+            background: white;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Accordion Layout */
+        .container.layout-accordion .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .accordion-item {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .accordion-header {
+            background-color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header:hover {
+            background-color: var(--light-color);
+        }
+
+        .accordion-content {
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accordion-content.active {
+            max-height: 500px;
+            padding: 20px;
+            border-top: 1px solid var(--light-color);
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+            font-size: 20px;
+        }
+
+        .accordion-icon.active {
+            transform: rotate(180deg);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .container.layout-standard .content-area,
+            .container.layout-left-sidebar .content-area,
+            .container.layout-right-sidebar .content-area,
+            .container.layout-dashboard .content-area {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "list"
+                    "form"
+                    "sidebar";
+            }
+
+            .container.layout-left-sidebar .elements-container,
+            .container.layout-right-sidebar .details-container,
+            .container.layout-dashboard .elements-container {
+                grid-row: auto;
+                grid-column: auto;
+            }
+
+            .container.layout-right-sidebar .details-container {
+                border-left: none;
+                border-top: 4px solid var(--primary-color);
+                border-radius: var(--border-radius);
+            }
+
+            .container.layout-right-sidebar .details-container .component-header {
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+            }
+
+            .container.layout-dashboard .form-container,
+            .container.layout-dashboard .details-container {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+            }
+        }
+
+        /* Layout indicator */
+        .current-layout {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container layout-standard">
+        <header>
+            <h1>Component Layout Demo</h1>
+            <p>Explore different layout options for the three main components</p>
+        </header>
+
+        <section class="layout-switcher">
+            <h2>Choose a Layout</h2>
+            <div class="layout-options">
+                <button class="layout-btn active" data-layout="layout-standard">Standard (Equal Width)</button>
+                <button class="layout-btn" data-layout="layout-left-sidebar">Left Sidebar</button>
+                <button class="layout-btn" data-layout="layout-right-sidebar">Right Sidebar</button>
+                <button class="layout-btn" data-layout="layout-stacked">Stacked Vertical</button>
+                <button class="layout-btn" data-layout="layout-dashboard">Dashboard</button>
+                <button class="layout-btn" data-layout="layout-tabs">Tabs</button>
+                <button class="layout-btn" data-layout="layout-accordion">Accordion</button>
+            </div>
+            <div class="current-layout">Current: Standard Layout</div>
+        </section>
+
+        <main class="content-area">
+            <!-- Standard layout components -->
+            <div class="component elements-container">
+                <div class="component-header">
+                    <h2>Elements List</h2>
+                    <span class="item-count">5 items</span>
+                </div>
+                <ul class="elements-list">
+                    <li class="active">Item 1 - Project Overview</li>
+                    <li>Item 2 - User Research</li>
+                    <li>Item 3 - Design System</li>
+                    <li>Item 4 - Wireframes</li>
+                    <li>Item 5 - Prototypes</li>
+                </ul>
+            </div>
+
+            <div class="component form-container">
+                <div class="component-header">
+                    <h2>Add New Element</h2>
+                </div>
+                <form class="add-form">
+                    <div class="form-group">
+                        <label for="element-name">Name</label>
+                        <input type="text" id="element-name" placeholder="Enter element name">
+                    </div>
+                    <div class="form-group">
+                        <label for="element-category">Category</label>
+                        <select id="element-category">
+                            <option value="">Select a category</option>
+                            <option value="planning">Planning</option>
+                            <option value="design">Design</option>
+                            <option value="development">Development</option>
+                            <option value="testing">Testing</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="element-description">Description</label>
+                        <textarea id="element-description" rows="4" placeholder="Enter description"></textarea>
+                    </div>
+                    <button type="submit">Add Element</button>
+                </form>
+            </div>
+
+            <div class="component details-container">
+                <div class="component-header">
+                    <h2>Element Details</h2>
+                </div>
+                <div class="details-content">
+                    <div class="detail-item">
+                        <div class="detail-label">Name:</div>
+                        <div class="detail-value">Project Overview</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Category:</div>
+                        <div class="detail-value">Planning</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Created:</div>
+                        <div class="detail-value">March 2, 2025</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Status:</div>
+                        <div class="detail-value">Active</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Description:</div>
+                        <div class="detail-value">
+                            This document provides a comprehensive overview of the project goals, 
+                            timeline, and key deliverables. It includes the main requirements and 
+                            constraints for the project team.
+                        </div>
+                    </div>
+                    <div class="detail-actions">
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab layout components -->
+            <div id="tab-layout-container" style="display:none; width:100%;">
+                <div class="tab-navigation">
+                    <button class="tab-button active" data-tab="elements-tab">Elements List</button>
+                    <button class="tab-button" data-tab="form-tab">Add Form</button>
+                    <button class="tab-button" data-tab="details-tab">Details View</button>
+                </div>
+                
+                <div id="elements-tab" class="tab-content active">
+                    <div class="component-header">
+                        <h2>Elements List</h2>
+                        <span class="item-count">5 items</span>
+                    </div>
+                    <ul class="elements-list">
+                        <li class="active">Item 1 - Project Overview</li>
+                        <li>Item 2 - User Research</li>
+                        <li>Item 3 - Design System</li>
+                        <li>Item 4 - Wireframes</li>
+                        <li>Item 5 - Prototypes</li>
+                    </ul>
+                </div>
+                
+                <div id="form-tab" class="tab-content">
+                    <div class="component-header">
+                        <h2>Add New Element</h2>
+                    </div>
+                    <form class="add-form">
+                        <div class="form-group">
+                            <label for="tab-element-name">Name</label>
+                            <input type="text" id="tab-element-name" placeholder="Enter element name">
+                        </div>
+                        <div class="form-group">
+                            <label for="tab-element-category">Category</label>
+                            <select id="tab-element-category">
+                                <option value="">Select a category</option>
+                                <option value="planning">Planning</option>
+                                <option value="design">Design</option>
+                                <option value="development">Development</option>
+                                <option value="testing">Testing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tab-element-description">Description</label>
+                            <textarea id="tab-element-description" rows="4" placeholder="Enter description"></textarea>
+                        </div>
+                        <button type="submit">Add Element</button>
+                    </form>
+                </div>
+                
+                <div id="details-tab" class="tab-content">
+                    <div class="component-header">
+                        <h2>Element Details</h2>
+                    </div>
+                    <div class="details-content">
+                        <div class="detail-item">
+                            <div class="detail-label">Name:</div>
+                            <div class="detail-value">Project Overview</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Category:</div>
+                            <div class="detail-value">Planning</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Created:</div>
+                            <div class="detail-value">March 2, 2025</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Status:</div>
+                            <div class="detail-value">Active</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Description:</div>
+                            <div class="detail-value">
+                                This document provides a comprehensive overview of the project goals, 
+                                timeline, and key deliverables. It includes the main requirements and 
+                                constraints for the project team.
+                            </div>
+                        </div>
+                        <div class="detail-actions">
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion layout components -->
+            <div id="accordion-container" style="display:none; width:100%;">
+                <div class="accordion-item">
+                    <div class="accordion-header" data-accordion="elements-accordion">
+                        <span>Elements List</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div id="elements-accordion" class="accordion-content active">
+                        <span class="item-count">5 items</span>
+                        <ul class="elements-list">
+                            <li class="active">Item 1 - Project Overview</li>
+                            <li>Item 2 - User Research</li>
+                            <li>Item 3 - Design System</li>
+                            <li>Item 4 - Wireframes</li>
+                            <li>Item 5 - Prototypes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header" data-accordion="form-accordion">
+                        <span>Add New Element</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div id="form-accordion" class="accordion-content">
+                        <form class="add-form">
+                            <div class="form-group">
+                                <label for="accordion-element-name">Name</label>
+                                <input type="text" id="accordion-element-name" placeholder="Enter element name">
+                            </div>
+                            <div class="form-group">
+                                <label for="accordion-element-category">Category</label>
+                                <select id="accordion-element-category">
+                                    <option value="">Select a category</option>
+                                    <option value="planning">Planning</option>
+                                    <option value="design">Design</option>
+                                    <option value="development">Development</option>
+                                    <option value="testing">Testing</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="accordion-element-description">Description</label>
+                                <textarea id="accordion-element-description" rows="4" placeholder="Enter description"></textarea>
+                            </div>
+                            <button type="submit">Add Element</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header" data-accordion="details-accordion">
+                        <span>Element Details</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div id="details-accordion" class="accordion-content">
+                        <div class="details-content">
+                            <div class="detail-item">
+                                <div class="detail-label">Name:</div>
+                                <div class="detail-value">Project Overview</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Category:</div>
+                                <div class="detail-value">Planning</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Created:</div>
+                                <div class="detail-value">March 2, 2025</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Status:</div>
+                                <div class="detail-value">Active</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Description:</div>
+                                <div class="detail-value">
+                                    This document provides a comprehensive overview of the project goals, 
+                                    timeline, and key deliverables. It includes the main requirements and 
+                                    constraints for the project team.
+                                </div>
+                            </div>
+                            <div class="detail-actions">
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Layout switching functionality
+        document.querySelectorAll('.layout-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.layout-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get layout class
+                const layoutClass = this.getAttribute('data-layout');
+                
+                // Get container element
+                const container = document.querySelector('.container');
+                
+                // Remove all layout classes from container
+                container.classList.remove(
+                    'layout-standard', 
+                    'layout-left-sidebar', 
+                    'layout-right-sidebar', 
+                    'layout-stacked', 
+                    'layout-dashboard',
+                    'layout-tabs',
+                    'layout-accordion'
+                );
+                
+                // Add the selected layout class to container
+                container.classList.add(layoutClass);
+
+                // Update the current layout text
+                const layoutName = this.textContent;
+                document.querySelector('.current-layout').textContent = 'Current: ' + layoutName;
+                
+                // Standard components
+                const elementsContainer = document.querySelector('.elements-container');
+                const formContainer = document.querySelector('.form-container');
+                const detailsContainer = document.querySelector('.details-container');
+                
+                // Special layout containers
+                const tabContainer = document.getElementById('tab-layout-container');
+                const accordionContainer = document.getElementById('accordion-container');
+                
+                // Hide all containers first
+                [elementsContainer, formContainer, detailsContainer, tabContainer, accordionContainer].forEach(el => {
+                    if (el) el.style.display = 'none';
+                });
+                
+                // Show appropriate containers based on layout
+                if (layoutClass === 'layout-tabs') {
+                    if (tabContainer) tabContainer.style.display = 'block';
+                } else if (layoutClass === 'layout-accordion') {
+                    if (accordionContainer) accordionContainer.style.display = 'block';
+                } else {
+                    // For all other layouts, show the standard components
+                    [elementsContainer, formContainer, detailsContainer].forEach(el => {
+                        if (el) el.style.display = 'block';
+                    });
+                }
+            });
+        });
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all tab buttons
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get tab content id
+                const tabId = this.getAttribute('data-tab');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the selected tab content
+                const selectedTab = document.getElementById(tabId);
+                if (selectedTab) {
+                    selectedTab.classList.add('active');
+                }
+            });
+        });
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                // Get accordion content id
+                const accordionId = this.getAttribute('data-accordion');
+                const content = document.getElementById(accordionId);
+                const icon = this.querySelector('.accordion-icon');
+                
+                // Toggle active class on content and icon
+                if (content) content.classList.toggle('active');
+                if (icon) icon.classList.toggle('active');
+            });
+        });
+
+        // List item selection - use event delegation for dynamically created lists
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.tagName === 'LI' && e.target.closest('.elements-list')) {
+                // Remove active class from all list items
+                document.querySelectorAll('.elements-list li').forEach(li => {
+                    li.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                e.target.classList.add('active');
+            }
+        });
+
+        // Form submission (prevent actual submission) - use event delegation
+        document.addEventListener('submit', function(e) {
+            if (e.target && e.target.classList.contains('add-form')) {
+                e.preventDefault();
+                alert('Form submission would add a new element here!');
+            }
+        });
+    </script>
+</body>
+</html>

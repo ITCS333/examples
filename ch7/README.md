@@ -5,5 +5,6 @@ This chapter has the following examples:
 2. [Example 2](flex.html): Flex.
 3. [Example 3](grid.html): Grid.
 4. [Example 4](responsive.html): Responsive Design.
+4. [Example 5](layouts.html): CSS Layouts.
 
 Each link will take you to an explanation of the example.
