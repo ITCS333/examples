@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Fundamentals Quiz</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --neutral-color: #f5f5f5;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--text-color);
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+        
+        .quiz-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quiz-body {
+            padding: 20px;
+        }
+        
+        .quiz-question {
+            margin-bottom: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .code-editor {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            margin-bottom: 15px;
+            resize: vertical;
+            background-color: #f8f8f8;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .navigation-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        button:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .feedback {
+            margin: 15px 0px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+            display: block;
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+            display: block;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .hints {
+            margin: 10px 0px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .hint-text {
+            display: none;
+            margin: 10px 0px;
+            padding: 10px;
+            background-color: #fffde7;
+            border-left: 3px solid #ffd600;
+        }
+        
+        .hint-button {
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 10px 0px;
+        }
+        
+        .question-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .question-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            color: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .question-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .question-btn.current {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .question-btn.answered {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .nav-btn {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .quiz-header {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+            
+            .quiz-body {
+                padding: 15px;
+            }
+            
+            button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .code-editor {
+                min-height: 80px;
+            }
+            
+            .question-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            
+            .navigation-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .navigation-container button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Fundamentals Quiz</h1>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <div>Question <span id="questionNumber">1</span> of <span id="totalQuestions">10</span></div>
+            <div>Score: <span id="currentScore">0</span>/<span id="totalQuestions2">10</span></div>
+        </div>
+        
+        <div class="question-nav" id="questionNav">
+            <!-- Question navigation buttons will be generated here -->
+        </div>
+        
+        <div class="quiz-body">
+            <div class="quiz-question" id="question"></div>
+            <textarea class="code-editor" id="codeEditor" spellcheck="false"></textarea>
+            <div class="hints">
+                <button class="hint-button" id="hintButton">Show Hint</button>
+                <div class="hint-text" id="hintText"></div>
+            </div>
+            <div class="feedback" id="feedback"></div>
+            <div class="button-container">
+                <button id="checkButton">Check Answer</button>
+                <button id="resetButton">Reset Code</button>
+            </div>
+            
+            <div class="navigation-container">
+                <button class="nav-btn" id="prevButton">Previous Question</button>
+                <button class="nav-btn" id="nextButton">Next Question</button>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Quiz questions with test cases and hints
+        const questions = [
+            {
+                question: "Declare a variable called 'myNumber' using the 'let' keyword and assign it the value 10.",
+                testFunction: function(code) {
+                    try {
+                        // Create a new function to evaluate the code in isolation
+                        const func = new Function(code + "; return typeof myNumber === 'number' && myNumber === 10;");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: let variableName = value;",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Declare a constant called 'PI' and assign it the value 3.14159.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return typeof PI === 'number' && Math.abs(PI - 3.14159) < 0.0001;");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: const variableName = value;",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create an array called 'colors' containing the following strings: 'red', 'green', 'blue', 'yellow'.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return Array.isArray(colors) && colors.length === 4 && colors[0] === 'red' && colors[1] === 'green' && colors[2] === 'blue' && colors[3] === 'yellow';");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use array literal notation: const arrayName = [value1, value2, ...];",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write a function called 'calculateArea' that takes two parameters: 'width' and 'height', and returns their product (the area).",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return typeof calculateArea === 'function' && calculateArea(5, 4) === 20 && calculateArea(3, 7) === 21;");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "function functionName(param1, param2) { return param1 * param2; }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create an object called 'person' with the following properties: 'name' set to 'John', 'age' set to 25, and 'city' set to 'New York'.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return typeof person === 'object' && person.name === 'John' && person.age === 25 && person.city === 'New York';");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use object literal notation: const objectName = { property1: value1, property2: value2, ... };",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write an if statement that checks if the variable 'age' is greater than or equal to 18. If true, set 'canVote' to true; otherwise, set it to false.",
+                testFunction: function(code) {
+                    try {
+                        // Test with age = 20
+                        let func1 = new Function("let age = 20; let canVote; " + code + "; return canVote === true;");
+                        const result1 = func1();
+                        
+                        // Test with age = 16
+                        let func2 = new Function("let age = 16; let canVote; " + code + "; return canVote === false;");
+                        const result2 = func2();
+                        
+                        return result1 && result2;
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: if (condition) { // code if true } else { // code if false }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write a for loop that iterates from 1 to 5 and adds each number to an array called 'numbers'.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function("let numbers = []; " + code + "; return numbers.length === 5 && numbers[0] === 1 && numbers[1] === 2 && numbers[2] === 3 && numbers[3] === 4 && numbers[4] === 5;");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: for (let i = 1; i <= 5; i++) { numbers.push(i); }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create an arrow function called 'double' that takes a number as a parameter and returns twice its value.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return typeof double === 'function' && double(4) === 8 && double(7) === 14;");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "const functionName = (parameter) => parameter * 2;",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write a function expression called 'isEven' that takes a number as a parameter and returns true if the number is even, false otherwise.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return typeof isEven === 'function' && isEven(2) === true && isEven(7) === false;");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: const functionName = function(parameter) { // code };",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create an object called 'book' with properties: 'title' set to 'JavaScript Basics', 'author' set to 'John Doe', and a method called 'getSummary' that returns a string in the format: 'Title: [title], Author: [author]'.",
+                testFunction: function(code) {
+                    try {
+                        const func = new Function(code + "; return typeof book === 'object' && book.title === 'JavaScript Basics' && book.author === 'John Doe' && typeof book.getSummary === 'function' && book.getSummary() === 'Title: JavaScript Basics, Author: John Doe';");
+                        return func();
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Include a method in your object: { title: 'value', author: 'value', getSummary: function() { return 'Title: ' + this.title + ', Author: ' + this.author; } }",
+                userCode: '',
+                answered: false,
+                correct: false
+            }
+        ];
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const codeEditor = document.getElementById('codeEditor');
+        const feedbackElement = document.getElementById('feedback');
+        const checkButton = document.getElementById('checkButton');
+        const resetButton = document.getElementById('resetButton');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const hintButton = document.getElementById('hintButton');
+        const hintText = document.getElementById('hintText');
+        const questionNumberElement = document.getElementById('questionNumber');
+        const totalQuestionsElement = document.getElementById('totalQuestions');
+        const totalQuestionsElement2 = document.getElementById('totalQuestions2');
+        const currentScoreElement = document.getElementById('currentScore');
+        const questionNavElement = document.getElementById('questionNav');
+        const quizContainer = document.getElementById('quizContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const finalScoreElement = document.getElementById('finalScore');
+        // Initialize quiz
+        function initQuiz() {
+            totalQuestionsElement.textContent = questions.length;
+            totalQuestionsElement2.textContent = questions.length;
+            createQuestionNav();
+            loadQuestion(0);
+            updateNavButtons();
+        }
+
+        // Create question navigation
+        function createQuestionNav() {
+            questionNavElement.innerHTML = '';
+            for (let i = 0; i < questions.length; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'question-btn';
+                btn.textContent = i + 1;
+                btn.addEventListener('click', () => {
+                    saveCurrentAnswer();
+                    loadQuestion(i);
+                });
+                questionNavElement.appendChild(btn);
+            }
+            updateQuestionNav();
+        }
+
+        // Update question navigation styling
+        function updateQuestionNav() {
+            const navButtons = questionNavElement.querySelectorAll('.question-btn');
+            navButtons.forEach((btn, index) => {
+                btn.classList.remove('current', 'answered');
+                if (index === currentQuestion) {
+                    btn.classList.add('current');
+                }
+                if (questions[index].answered) {
+                    btn.classList.add('answered');
+                }
+            });
+        }
+
+        // Load question by index
+        function loadQuestion(index) {
+            currentQuestion = index;
+            const question = questions[currentQuestion];
+            
+            questionElement.textContent = question.question;
+            codeEditor.value = question.userCode;
+            
+            if (question.answered) {
+                if (question.correct) {
+                    feedbackElement.className = 'feedback success';
+                    feedbackElement.textContent = 'Correct! Well done!';
+                } else {
+                    feedbackElement.className = 'feedback error';
+                    feedbackElement.textContent = 'That\'s not quite right. You can try again!';
+                }
+            } else {
+                feedbackElement.className = 'feedback';
+                feedbackElement.textContent = '';
+            }
+            
+            questionNumberElement.textContent = currentQuestion + 1;
+            hintText.style.display = 'none';
+            
+            updateQuestionNav();
+            updateNavButtons();
+            updateScore();
+        }
+
+        // Save current answer
+        function saveCurrentAnswer() {
+            questions[currentQuestion].userCode = codeEditor.value;
+        }
+
+        // Check the answer
+        function checkAnswer() {
+            saveCurrentAnswer();
+            
+            const userCode = questions[currentQuestion].userCode.trim();
+            
+            if (userCode === '') {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = 'Please write some code before checking.';
+                return;
+            }
+            
+            const isCorrect = questions[currentQuestion].testFunction(userCode);
+            
+            questions[currentQuestion].answered = true;
+            questions[currentQuestion].correct = isCorrect;
+            
+            if (isCorrect) {
+                feedbackElement.className = 'feedback success';
+                feedbackElement.textContent = 'Correct! Well done!';
+                if (!questions[currentQuestion].correct) {
+                    score++;
+                    updateScore();
+                }
+            } else {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = 'That\'s not quite right. You can try again!';
+            }
+            
+            updateQuestionNav();
+        }
+
+        // Reset current question code
+        function resetCode() {
+            codeEditor.value = '';
+            questions[currentQuestion].userCode = '';
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = '';
+        }
+
+        // Navigate to previous question
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                saveCurrentAnswer();
+                loadQuestion(currentQuestion - 1);
+            }
+        }
+
+        // Navigate to next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                saveCurrentAnswer();
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        // Update navigation buttons state
+        function updateNavButtons() {
+            prevButton.disabled = currentQuestion === 0;
+            nextButton.disabled = currentQuestion === questions.length - 1;
+        }
+
+        // Show hint
+        function showHint() {
+            const hint = questions[currentQuestion].hint;
+            hintText.textContent = hint;
+            hintText.style.display = 'block';
+        }
+
+        // Calculate score
+        function calculateScore() {
+            score = 0;
+            for (const question of questions) {
+                if (question.correct) {
+                    score++;
+                }
+            }
+            return score;
+        }
+
+        // Update score display
+        function updateScore() {
+            score = calculateScore();
+            currentScoreElement.textContent = score;
+        }
+
+        // Event listeners
+        checkButton.addEventListener('click', checkAnswer);
+        resetButton.addEventListener('click', resetCode);
+        prevButton.addEventListener('click', prevQuestion);
+        nextButton.addEventListener('click', nextQuestion);
+        hintButton.addEventListener('click', showHint);
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
