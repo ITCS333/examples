@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript: Hoisting Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 { 
+            color: #2c3e50; 
+            border-bottom: 2px solid #3498db; 
+            padding-bottom: 10px; 
+        }
+        
+        h2 { 
+            color: #2980b9; 
+            margin-top: 25px; 
+        }
+        
+        .demo-box {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .code-box {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        
+        .result-box {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            min-height: 20px;
+            background-color: #fff;
+            margin-top: 10px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:hover { 
+            background-color: #2980b9; 
+        }
+        
+        .controls {
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Hoisting</h1>
+    
+    <p>In JavaScript, declarations (function and variable) are hoisted to the top of their containing scope. However, only the declarations are hoisted, not the assignments.</p>
+    
+    <!-- FUNCTION HOISTING EXAMPLE -->
+    <h2>Function Declaration Hoisting</h2>
+    
+    <div class="demo-box">
+        <div class="code-box">// We can call the function before it's defined
+// because function declarations are hoisted
+let result = calculateSquare(5);
+console.log("Result: " + result);  // This works!
+
+// The function declaration below is hoisted to the top
+function calculateSquare(number) {
+  return number * number;
+}</div>
+        
+        <div class="controls">
+            <button onclick="runFunctionHoistingExample()">Run Example</button>
+        </div>
+        
+        <div class="result-box" id="function-hoisting-result"></div>
+    </div>
+    
+    <!-- FUNCTION EXPRESSION HOISTING ISSUE -->
+    <h2>Function Expression Hoisting Problem</h2>
+    
+    <div class="demo-box">
+        <div class="code-box">// This will cause an error because only the variable declaration
+// is hoisted, but not the function assignment
+try {
+  let result = calculateCube(3);  // Error! calculateCube is not a function yet
+  console.log("Result: " + result);
+} catch(error) {
+  console.error("Error: " + error.message);
+}
+
+// Only the variable declaration is hoisted, not the function assignment
+const calculateCube = function(number) {
+  return number * number * number;
+};</div>
+        
+        <div class="controls">
+            <button onclick="runFunctionExpressionExample()">Run Example</button>
+        </div>
+        
+        <div class="result-box" id="function-expression-result"></div>
+    </div>
+    
+    <!-- VAR, LET & CONST HOISTING DIFFERENCES -->
+    <h2>Variable Hoisting Differences (var vs let/const)</h2>
+    
+    <div class="demo-box">
+        <div class="code-box">// Let's see how hoisting works differently with var, let, and const
+
+function demonstrateVarHoisting() {
+  console.log("Value of x before declaration: " + x);  // undefined
+  var x = 10;
+  console.log("Value of x after declaration: " + x);   // 10
+}
+
+function demonstrateLetHoisting() {
+  try {
+    console.log("Value of y before declaration: " + y);  // Error: Cannot access 'y' before initialization
+    let y = 20;
+  } catch(error) {
+    console.error("Error with let: " + error.message);
+  }
+}
+
+function demonstrateConstHoisting() {
+  try {
+    console.log("Value of z before declaration: " + z);  // Error: Cannot access 'z' before initialization
+    const z = 30;
+  } catch(error) {
+    console.error("Error with const: " + error.message);
+  }
+}</div>
+        
+        <div class="controls">
+            <button onclick="runVariableHoistingExample()">Run Example</button>
+        </div>
+        
+        <div class="result-box" id="variable-hoisting-result"></div>
+    </div>
+
+    <script>
+        // FUNCTION HOISTING EXAMPLE
+        function runFunctionHoistingExample() {
+            try {
+                // This demonstrates that function declarations are hoisted
+                const result = exampleCalculateSquare(5);
+                document.getElementById('function-hoisting-result').innerHTML = 
+                    "<span class='success'>Success! Function declaration was hoisted.</span><br>" +
+                    "Result: " + result;
+            } catch(error) {
+                document.getElementById('function-hoisting-result').innerHTML = 
+                    "<span class='error'>Error: " + error.message + "</span>";
+            }
+        }
+        
+        // This function will be hoisted - it can be used before its declaration
+        function exampleCalculateSquare(number) {
+            return number * number;
+        }
+        
+        // FUNCTION EXPRESSION EXAMPLE
+        function runFunctionExpressionExample() {
+            try {
+                // This will cause an error because function expressions are not hoisted
+                const result = calculateCubeExample(3);
+                document.getElementById('function-expression-result').innerHTML = 
+                    "Result: " + result;
+            } catch(error) {
+                document.getElementById('function-expression-result').innerHTML = 
+                    "<span class='error'>Error: " + error.message + "</span><br>" +
+                    "Function expressions are not hoisted - only variable declarations are.";
+            }
+            
+            // Now define the function expression
+            const calculateCubeExample = function(number) {
+                return number * number * number;
+            };
+        }
+        
+        // VARIABLE HOISTING EXAMPLE
+        function runVariableHoistingExample() {
+            let output = "";
+            
+            // Demonstrate var hoisting
+            function demoVarHoisting() {
+                output += "With var: <br>";
+                output += "Value of x before declaration: " + x + "<br>"; // undefined
+                var x = 10;
+                output += "Value of x after declaration: " + x + "<br><br>"; // 10
+            }
+            
+            // Demonstrate let hoisting
+            function demoLetHoisting() {
+                output += "With let: <br>";
+                try {
+                    // This will cause an error - let variables are hoisted but in the "temporal dead zone"
+                    output += "Value of y before declaration: " + y + "<br>";
+                    let y = 20;
+                } catch(error) {
+                    output += "<span class='error'>Error: " + error.message + "</span><br><br>";
+                }
+            }
+            
+            // Demonstrate const hoisting
+            function demoConstHoisting() {
+                output += "With const: <br>";
+                try {
+                    // This will cause an error - const variables are hoisted but in the "temporal dead zone"
+                    output += "Value of z before declaration: " + z + "<br>";
+                    const z = 30;
+                } catch(error) {
+                    output += "<span class='error'>Error: " + error.message + "</span><br>";
+                }
+            }
+            
+            // Run the demonstrations
+            demoVarHoisting();
+            demoLetHoisting();
+            demoConstHoisting();
+            
+            // Display the results
+            document.getElementById('variable-hoisting-result').innerHTML = output;
+        }
+    </script>
+</body>
+</html>

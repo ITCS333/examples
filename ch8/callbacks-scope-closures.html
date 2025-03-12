@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript: Callbacks, Scope & Closures</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 { 
+            color: #2c3e50; 
+            border-bottom: 2px solid #3498db; 
+            padding-bottom: 10px; 
+        }
+        
+        h2 { 
+            color: #2980b9; 
+            margin-top: 25px; 
+        }
+        
+        .demo-box {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .code-box {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        
+        .result-box {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            min-height: 20px;
+            background-color: #fff;
+            margin-top: 10px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:hover { 
+            background-color: #2980b9; 
+        }
+        
+        input, select { 
+            padding: 5px; 
+            margin: 0 5px; 
+        }
+        
+        .controls {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript: Callbacks, Scope & Closures</h1>
+    
+    <!-- CALLBACKS SECTION -->
+    <h2>Callbacks</h2>
+    <p>Callbacks are functions passed as arguments to other functions.</p>
+    
+    <div class="demo-box">
+        <div class="code-box">function processWithCallback(value, callback) {
+  return callback(value);
+}
+
+// Different operations
+function double(x) { 
+  return x * 2; 
+}
+
+function square(x) { 
+  return x * x; 
+}</div>
+        
+        <div class="controls">
+            <input type="number" id="callback-input" value="5">
+            <select id="callback-operation">
+                <option value="double">Double</option>
+                <option value="square">Square</option>
+            </select>
+            <button onclick="runCallback()">Calculate</button>
+        </div>
+        
+        <div class="result-box" id="callback-result"></div>
+    </div>
+    
+    <!-- SCOPE SECTION -->
+    <h2>Scope</h2>
+    <p>Scope determines variable visibility. JavaScript has global, function, and block scope.</p>
+    
+    <div class="demo-box">
+        <div class="code-box">// Demonstrating var vs let scope
+function scopeExample() {
+  // var is function scoped
+  if (true) {
+    var varVariable = "I'm a var - function scoped";
+  }
+  
+  // let is block scoped
+  if (true) {
+    let letVariable = "I'm a let - block scoped";
+    return [
+      varVariable, 
+      "Can access letVariable here", 
+      letVariable
+    ];
+  }
+  
+  return [
+    varVariable, 
+    "Can't access letVariable here", 
+    "N/A"
+  ];
+}</div>
+        
+        <div class="controls">
+            <button onclick="runScopeExample()">Run Scope Example</button>
+        </div>
+        <div class="result-box" id="scope-result"></div>
+    </div>
+    
+    <!-- CLOSURES SECTION -->
+    <h2>Closures</h2>
+    <p>A closure is a function that can access variables from its outer function even after that function has returned.</p>
+    
+    <div class="demo-box">
+        <div class="code-box">function createCounter(startValue) {
+  // This variable is "closed over" by the inner function
+  let count = startValue || 0;
+  
+  // Return a function that has access to the count variable
+  return function() {
+    return ++count;  // increment then return
+  };
+}
+
+// Create two separate counters with their own private state
+const counter1 = createCounter(0);
+const counter2 = createCounter(10);</div>
+        
+        <div class="controls">
+            <button onclick="runCounter(1)">Increment Counter 1</button>
+            <button onclick="runCounter(2)">Increment Counter 2</button>
+        </div>
+        <div class="result-box" id="closure-result"></div>
+    </div>
+
+    <script>
+        // Global variables for our demos
+        let counter1, counter2;
+        
+        // Initialize when page loads
+        window.onload = function() {
+            counter1 = createCounter(0);
+            counter2 = createCounter(10);
+            document.getElementById('closure-result').textContent = 
+                "Counter 1: 0, Counter 2: 10";
+        };
+        
+        // CALLBACK DEMO
+        function runCallback() {
+            const value = parseFloat(document.getElementById('callback-input').value);
+            const operation = document.getElementById('callback-operation').value;
+            
+            let result;
+            if (operation === 'double') {
+                result = processWithCallback(value, double);
+            } else {
+                result = processWithCallback(value, square);
+            }
+            
+            document.getElementById('callback-result').textContent = 
+                `Result: ${value} (${operation}) = ${result}`;
+        }
+        
+        function processWithCallback(value, callback) {
+            return callback(value);
+        }
+        
+        function double(x) { 
+            return x * 2; 
+        }
+        
+        function square(x) { 
+            return x * x; 
+        }
+        
+        // SCOPE DEMO
+        function runScopeExample() {
+            const result = scopeExample();
+            document.getElementById('scope-result').innerHTML = 
+                `var variable: ${result[0]}<br>
+                Outside the block: ${result[1]}<br>
+                let variable: ${result[2]}`;
+        }
+        
+        function scopeExample() {
+            // var is function scoped
+            if (true) {
+                var varVariable = "I'm a var - function scoped";
+            }
+            
+            // let is block scoped
+            if (true) {
+                let letVariable = "I'm a let - block scoped";
+                return [
+                    varVariable, 
+                    "Can access letVariable here", 
+                    letVariable
+                ];
+            }
+            
+            return [
+                varVariable, 
+                "Can't access letVariable here", 
+                "N/A"
+            ];
+        }
+        
+        // CLOSURE DEMO
+        function createCounter(startValue) {
+            // This variable is "closed over" by the inner function
+            let count = startValue || 0;
+            
+            // Return a function that has access to the count variable
+            return function() {
+                return ++count;  // increment then return
+            };
+        }
+        
+        function runCounter(counterNum) {
+            if (counterNum === 1) {
+                const newValue = counter1();
+                document.getElementById('closure-result').textContent = 
+                    `Counter 1: ${newValue}, Counter 2: ${counter2() - 1}`;
+            } else {
+                const newValue = counter2();
+                document.getElementById('closure-result').textContent = 
+                    `Counter 1: ${counter1() - 1}, Counter 2: ${newValue}`;
+            }
+        }
+    </script>
+</body>
+</html>
