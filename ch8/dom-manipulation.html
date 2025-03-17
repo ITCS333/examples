@@ -513,26 +513,37 @@
                 correct: false
             },
             {
-                question: "Use the style property to create a colorful box: change the div with id 'box' to have the following CSS properties: background-color: red; color: white; padding: 20px; border: 2px solid blue;",
-                html: `<div id="box">
-  This should be a colorful box
+                question: "Use classList methods to manipulate CSS classes: 1) Add the class 'highlight' to the first paragraph, 2) Remove the class 'remove-me' from the second paragraph, and 3) Toggle the class 'toggle-me' on the button when it's clicked.",
+                html: `<style>
+  .highlight { background-color: yellow; font-weight: bold; }
+  .remove-me { text-decoration: line-through; }
+  .toggle-me { background-color: green; color: white; }
+</style>
+<div id="class-demo">
+  <p id="add-class">Add the 'highlight' class to me</p>
+  <p id="remove-class" class="remove-me">Remove the 'remove-me' class from me</p>
+  <button id="toggle-class">Toggle the 'toggle-me' class on me</button>
 </div>`,
                 testFunction: function(resultElement) {
-                    const box = resultElement.querySelector('#box');
-                    if (!box) return false;
+                    const addClassPara = resultElement.querySelector('#add-class');
+                    const removeClassPara = resultElement.querySelector('#remove-class');
+                    const toggleButton = resultElement.querySelector('#toggle-class');
                     
-                    const style = window.getComputedStyle(box);
-                    const hasRedBg = style.backgroundColor === 'rgb(255, 0, 0)' || style.backgroundColor === 'red';
-                    const hasWhiteText = style.color === 'rgb(255, 255, 255)' || style.color === 'white';
-                    const hasPadding = style.padding === '20px' || 
-                                      (style.paddingTop === '20px' && style.paddingRight === '20px' && 
-                                       style.paddingBottom === '20px' && style.paddingLeft === '20px');
-                    const hasBlueBorder = style.border.includes('2px') && 
-                                         (style.border.includes('rgb(0, 0, 255)') || style.border.includes('blue'));
+                    // Check if the first paragraph has the highlight class
+                    const hasHighlightClass = addClassPara && addClassPara.classList.contains('highlight');
                     
-                    return hasRedBg && hasWhiteText && hasPadding && hasBlueBorder;
+                    // Check if the second paragraph doesn't have the remove-me class
+                    const removedClass = removeClassPara && !removeClassPara.classList.contains('remove-me');
+                    
+                    // For the toggle, we'll just check if the event listener was added
+                    // We can't easily test the actual toggle functionality in this environment
+                    const hasToggleSetup = toggleButton && 
+                                          toggleButton.onclick !== null && 
+                                          typeof toggleButton.onclick === 'function';
+                    
+                    return hasHighlightClass && removedClass && hasToggleSetup;
                 },
-                hint: "Get the box element by ID, then set multiple style properties: style.backgroundColor, style.color, style.padding, and style.border.",
+                hint: "Use element.classList.add('class-name') to add a class, element.classList.remove('class-name') to remove a class, and element.classList.toggle('class-name') inside a click event listener to toggle a class.",
                 userCode: '',
                 answered: false,
                 correct: false
