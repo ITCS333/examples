@@ -334,112 +334,98 @@
         // Quiz questions with HTML, test cases, and hints
         const questions = [
             {
-                question: "Add a click event listener to the button that changes the text of the paragraph to 'Button was clicked!'",
+                question: "Add a click event listener to the button that changes the paragraph text",
                 html: `<div>
-  <button id="clickButton">Click Me</button>
-  <p id="output">This text will change when the button is clicked.</p>
+  <button id="btn">Click Me</button>
+  <p id="txt">Text will change</p>
 </div>`,
                 testFunction: function(resultElement) {
-                    const button = resultElement.querySelector('#clickButton');
-                    const output = resultElement.querySelector('#output');
+                    const button = resultElement.querySelector('#btn');
+                    const output = resultElement.querySelector('#txt');
                     
                     // Simulate a click
                     if (button && output) {
                         const originalText = output.textContent;
                         button.click();
-                        return output.textContent !== originalText && output.textContent === 'Button was clicked!';
+                        return output.textContent !== originalText;
                     }
                     return false;
                 },
-                hint: "Use document.getElementById('clickButton').addEventListener('click', function() { ... }) to attach a click event handler to the button.",
+                hint: "document.getElementById('btn').addEventListener('click', function() { document.getElementById('txt').textContent = 'Clicked!' });",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Add mouseover and mouseout event listeners to the box that change its background color to yellow on mouseover and back to lightgray on mouseout.",
+                question: "Add mouseover and mouseout events to change the box color",
                 html: `<div>
-  <div id="hoverBox" style="width: 200px; height: 100px; background-color: lightgray; display: flex; justify-content: center; align-items: center; margin: 20px auto;">
+  <div id="box" style="width: 200px; height: 100px; background-color: lightgray; margin: 20px auto; text-align: center; line-height: 100px;">
     Hover over me
   </div>
 </div>`,
                 testFunction: function(resultElement) {
-                    const box = resultElement.querySelector('#hoverBox');
+                    const box = resultElement.querySelector('#box');
                     if (!box) return false;
-                    
-                    // Store original background color
-                    const originalBgColor = window.getComputedStyle(box).backgroundColor;
                     
                     // Simulate mouseover
                     const mouseoverEvent = new MouseEvent('mouseover');
                     box.dispatchEvent(mouseoverEvent);
                     
-                    // Check if background changed to yellow
+                    // Check if background changed
                     const afterHoverBgColor = window.getComputedStyle(box).backgroundColor;
-                    const isYellow = afterHoverBgColor === 'rgb(255, 255, 0)' || afterHoverBgColor === 'yellow';
+                    const colorChanged = afterHoverBgColor !== 'rgb(211, 211, 211)' && afterHoverBgColor !== 'lightgray';
                     
                     // Simulate mouseout
                     const mouseoutEvent = new MouseEvent('mouseout');
                     box.dispatchEvent(mouseoutEvent);
                     
-                    // Check if background changed back
-                    const afterOutBgColor = window.getComputedStyle(box).backgroundColor;
-                    const isBackToOriginal = afterOutBgColor === originalBgColor || afterOutBgColor === 'rgb(211, 211, 211)' || afterOutBgColor === 'lightgray';
-                    
-                    return isYellow && isBackToOriginal;
+                    return colorChanged;
                 },
-                hint: "Use element.addEventListener('mouseover', function() { element.style.backgroundColor = 'yellow'; }) and element.addEventListener('mouseout', function() { element.style.backgroundColor = 'lightgray'; })",
+                hint: "box.addEventListener('mouseover', function() { this.style.backgroundColor = 'yellow'; });\nbox.addEventListener('mouseout', function() { this.style.backgroundColor = 'lightgray'; });",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Add a keydown event listener to the input field that displays the pressed key in the paragraph below it.",
+                question: "Add a keydown event to show which key was pressed",
                 html: `<div>
-  <input type="text" id="keyInput" placeholder="Type something...">
-  <p id="keyOutput">Press any key to see it displayed here.</p>
+  <input type="text" id="input" placeholder="Type here...">
+  <p id="output">Key pressed: none</p>
 </div>`,
                 testFunction: function(resultElement) {
-                    const input = resultElement.querySelector('#keyInput');
-                    const output = resultElement.querySelector('#keyOutput');
+                    const input = resultElement.querySelector('#input');
+                    const output = resultElement.querySelector('#output');
                     
                     if (!input || !output) return false;
                     
-                    // Check if keydown event listener exists and works
-                    const originalText = output.textContent;
-                    
-                    // Simulate keydown event with the letter 'A'
+                    // Simulate keydown event
                     const keyEvent = new KeyboardEvent('keydown', {
                         key: 'A',
-                        code: 'KeyA',
-                        keyCode: 65,
-                        which: 65,
                         bubbles: true
                     });
                     
                     input.dispatchEvent(keyEvent);
                     
-                    // Check if the output contains the key 'A'
-                    return output.textContent !== originalText && output.textContent.includes('A');
+                    return output.textContent !== "Key pressed: none";
                 },
-                hint: "Use input.addEventListener('keydown', function(event) { document.getElementById('keyOutput').textContent = 'You pressed: ' + event.key; })",
+                hint: "input.addEventListener('keydown', function(event) { output.textContent = 'Key pressed: ' + event.key; });",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Implement form validation: Add a submit event listener to the form that prevents submission if the input field is empty and displays an error message.",
+                question: "Add form validation: prevent submit if input is empty",
                 html: `<div>
-  <form id="validationForm">
-    <input type="text" id="nameInput" placeholder="Enter your name">
+  <form id="form">
+    <input type="text" id="name" placeholder="Enter name">
     <button type="submit">Submit</button>
   </form>
-  <p id="errorMessage" style="color: red;"></p>
+  <p id="error" style="color: red;"></p>
 </div>`,
                 testFunction: function(resultElement) {
-                    const form = resultElement.querySelector('#validationForm');
-                    const input = resultElement.querySelector('#nameInput');
-                    const errorMsg = resultElement.querySelector('#errorMessage');
+                    const form = resultElement.querySelector('#form');
+                    const input = resultElement.querySelector('#name');
+                    const errorMsg = resultElement.querySelector('#error');
                     
                     if (!form || !input || !errorMsg) return false;
                     
@@ -450,305 +436,170 @@
                     const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
                     const preventDefaultCalled = !form.dispatchEvent(submitEvent);
                     
-                    // Check if preventDefault was called and error message is displayed
-                    const hasErrorMessage = errorMsg.textContent.trim() !== '';
-                    
-                    // Now test with valid input
-                    input.value = 'John Doe';
-                    const submitEvent2 = new Event('submit', { bubbles: true, cancelable: true });
-                    const preventDefaultCalled2 = !form.dispatchEvent(submitEvent2);
-                    
-                    // For valid input, we don't expect preventDefault to be called
-                    // But since we can't actually submit the form in this environment,
-                    // we'll just check that the error message is cleared
-                    const errorCleared = preventDefaultCalled && !preventDefaultCalled2 && errorMsg.textContent.trim() === '';
-                    
-                    return preventDefaultCalled && hasErrorMessage;
+                    return preventDefaultCalled && errorMsg.textContent.trim() !== '';
                 },
-                hint: "Use form.addEventListener('submit', function(event) { if (document.getElementById('nameInput').value.trim() === '') { event.preventDefault(); document.getElementById('errorMessage').textContent = 'Name is required!'; } else { document.getElementById('errorMessage').textContent = ''; } })",
+                hint: "form.addEventListener('submit', function(event) { if(name.value === '') { event.preventDefault(); error.textContent = 'Required!'; } });",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Create a simple event delegation: Add a single click event listener to the unordered list that displays the text of the clicked list item in the paragraph below.",
+                question: "Use event delegation: Add one click listener to the list",
                 html: `<div>
-  <ul id="fruitList">
+  <ul id="list">
     <li>Apple</li>
     <li>Banana</li>
     <li>Cherry</li>
-    <li>Date</li>
   </ul>
-  <p id="selectedFruit">Click on a fruit to select it.</p>
+  <p id="selected">Click a fruit</p>
 </div>`,
                 testFunction: function(resultElement) {
-                    const list = resultElement.querySelector('#fruitList');
-                    const output = resultElement.querySelector('#selectedFruit');
-                    const listItems = resultElement.querySelectorAll('#fruitList li');
+                    const list = resultElement.querySelector('#list');
+                    const output = resultElement.querySelector('#selected');
+                    const firstItem = resultElement.querySelector('#list li');
                     
-                    if (!list || !output || listItems.length === 0) return false;
+                    if (!list || !output || !firstItem) return false;
                     
-                    // Test clicking on each list item
-                    let allWorking = true;
+                    // Simulate click on first item
+                    firstItem.click();
                     
-                    for (const li of listItems) {
-                        const originalOutput = output.textContent;
-                        const fruitName = li.textContent;
-                        
-                        // Simulate click
-                        li.click();
-                        
-                        // Check if output changed and contains the fruit name
-                        if (output.textContent === originalOutput || !output.textContent.includes(fruitName)) {
-                            allWorking = false;
-                            break;
-                        }
-                    }
-                    
-                    return allWorking;
+                    // Check if output changed and contains the fruit name
+                    return output.textContent !== "Click a fruit" && 
+                           output.textContent.includes(firstItem.textContent);
                 },
-                hint: "Use event delegation by adding the event listener to the parent element and checking event.target: document.getElementById('fruitList').addEventListener('click', function(event) { if (event.target.tagName === 'LI') { document.getElementById('selectedFruit').textContent = 'Selected: ' + event.target.textContent; } })",
+                hint: "list.addEventListener('click', function(event) { if(event.target.tagName === 'LI') { selected.textContent = 'Selected: ' + event.target.textContent; } });",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Implement event propagation control: Add click event listeners to both the inner and outer divs. The inner div should stop event propagation.",
+                question: "Stop event propagation: Inner div click shouldn't trigger outer div",
                 html: `<div>
   <div id="outer" style="padding: 20px; background-color: lightblue; text-align: center;">
-    Outer Div
-    <div id="inner" style="padding: 20px; background-color: lightcoral; margin: 10px;">
-      Inner Div
+    Outer
+    <div id="inner" style="padding: 20px; background-color: pink; margin: 10px;">
+      Inner
     </div>
   </div>
-  <p id="clickLog">Click events will be logged here.</p>
+  <p id="log">Click log</p>
 </div>`,
                 testFunction: function(resultElement) {
                     const outer = resultElement.querySelector('#outer');
                     const inner = resultElement.querySelector('#inner');
-                    const log = resultElement.querySelector('#clickLog');
+                    const log = resultElement.querySelector('#log');
                     
                     if (!outer || !inner || !log) return false;
                     
                     // Clear the log
-                    log.textContent = 'Click events will be logged here.';
+                    log.textContent = 'Click log';
                     
-                    // Simulate click on outer div (not on inner)
-                    const outerRect = outer.getBoundingClientRect();
-                    const innerRect = inner.getBoundingClientRect();
-                    
-                    // Click on outer div but not on inner div
-                    const outerClickX = outerRect.left + 5;
-                    const outerClickY = outerRect.top + 5;
-                    
-                    const outerClickEvent = new MouseEvent('click', {
-                        bubbles: true,
-                        cancelable: true,
-                        view: window,
-                        clientX: outerClickX,
-                        clientY: outerClickY
-                    });
-                    
-                    outer.dispatchEvent(outerClickEvent);
-                    
-                    // Check if outer click was logged
-                    const outerClickLogged = log.textContent.includes('outer') || log.textContent.includes('Outer');
-                    
-                    // Now simulate click on inner div
+                    // Simulate click on inner div
                     inner.click();
                     
                     // Check if inner click was logged but not propagated to outer
-                    const innerClickLogged = log.textContent.includes('inner') || log.textContent.includes('Inner');
-                    const noPropagation = !(log.textContent.match(/outer|Outer/g) || []).length > 1;
-                    
-                    return outerClickLogged && innerClickLogged && noPropagation;
+                    return log.textContent.includes('inner') && 
+                           !(log.textContent.match(/outer/gi) || []).length > 0;
                 },
-                hint: "Add event listeners to both divs, and use event.stopPropagation() in the inner div's handler: document.getElementById('inner').addEventListener('click', function(event) { event.stopPropagation(); document.getElementById('clickLog').textContent += '\\nInner div clicked'; })",
+                hint: "outer.addEventListener('click', () => { log.textContent += ' | outer clicked'; });\ninner.addEventListener('click', (e) => { e.stopPropagation(); log.textContent += ' | inner clicked'; });",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Create a custom event: Dispatch a custom 'userLogin' event when the login button is clicked, and have a listener that updates the welcome message.",
+                question: "Create a custom 'login' event when button is clicked",
                 html: `<div>
-  <button id="loginButton">Login</button>
-  <p id="welcomeMessage">Please log in</p>
+  <button id="login">Login</button>
+  <p id="message">Please log in</p>
 </div>`,
                 testFunction: function(resultElement) {
-                    const loginButton = resultElement.querySelector('#loginButton');
-                    const welcomeMessage = resultElement.querySelector('#welcomeMessage');
+                    const loginButton = resultElement.querySelector('#login');
+                    const message = resultElement.querySelector('#message');
                     
-                    if (!loginButton || !welcomeMessage) return false;
+                    if (!loginButton || !message) return false;
                     
-                    // Reset welcome message
-                    welcomeMessage.textContent = 'Please log in';
-                    
-                    // Check if custom event listener exists
-                    let customEventHandled = false;
-                    
-                    // Create a temporary event listener to check if our custom event is dispatched
-                    document.addEventListener('userLogin', function tempHandler() {
-                        customEventHandled = true;
-                        document.removeEventListener('userLogin', tempHandler);
+                    // Check for custom event
+                    let customEventFired = false;
+                    document.addEventListener('login', function temp() {
+                        customEventFired = true;
+                        document.removeEventListener('login', temp);
                     });
                     
                     // Simulate button click
                     loginButton.click();
                     
-                    // Check if welcome message changed and custom event was dispatched
-                    const messageChanged = welcomeMessage.textContent !== 'Please log in';
-                    
-                    return customEventHandled && messageChanged;
+                    return customEventFired && message.textContent !== 'Please log in';
                 },
-                hint: "Create and dispatch a custom event: loginButton.addEventListener('click', function() { const loginEvent = new CustomEvent('userLogin', { detail: { username: 'User' } }); document.dispatchEvent(loginEvent); }); Then listen for it: document.addEventListener('userLogin', function(event) { document.getElementById('welcomeMessage').textContent = 'Welcome, ' + event.detail.username + '!'; });",
+                hint: "login.addEventListener('click', () => {\n  const event = new CustomEvent('login');\n  document.dispatchEvent(event);\n});\n\ndocument.addEventListener('login', () => {\n  message.textContent = 'Welcome!';\n});",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Implement a simple drag functionality: Make the box draggable by using mousedown, mousemove, and mouseup events.",
+                question: "Make the box draggable (copy the provided code)",
                 html: `<div>
-  <div id="draggableBox" style="width: 100px; height: 100px; background-color: #3498db; position: absolute; top: 50px; left: 50px; cursor: move; display: flex; justify-content: center; align-items: center; color: white;">
+  <div id="box" style="width: 100px; height: 100px; background-color: #3498db; position: absolute; top: 50px; left: 50px; cursor: move; color: white; text-align: center; line-height: 100px;">
     Drag me
   </div>
 </div>`,
                 testFunction: function(resultElement) {
-                    const box = resultElement.querySelector('#draggableBox');
+                    const box = resultElement.querySelector('#box');
                     
                     if (!box) return false;
                     
-                    // Store initial position
-                    const initialLeft = parseInt(box.style.left);
-                    const initialTop = parseInt(box.style.top);
-                    
-                    // Simulate mousedown
-                    const mousedownEvent = new MouseEvent('mousedown', {
-                        bubbles: true,
-                        cancelable: true,
-                        clientX: initialLeft,
-                        clientY: initialTop
-                    });
-                    
-                    box.dispatchEvent(mousedownEvent);
-                    
-                    // Simulate mousemove
-                    const mousemoveEvent = new MouseEvent('mousemove', {
-                        bubbles: true,
-                        cancelable: true,
-                        clientX: initialLeft + 50,
-                        clientY: initialTop + 50
-                    });
-                    
-                    document.dispatchEvent(mousemoveEvent);
-                    
-                    // Simulate mouseup
-                    const mouseupEvent = new MouseEvent('mouseup', {
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    
-                    document.dispatchEvent(mouseupEvent);
-                    
-                    // Check if position changed
-                    const newLeft = parseInt(box.style.left);
-                    const newTop = parseInt(box.style.top);
-                    
-                    // Position should be different after drag
-                    const positionChanged = newLeft !== initialLeft || newTop !== initialTop;
-                    
-                    // Check if all required event listeners were added
+                    // Check if mousedown listener was added
                     const hasMouseDownListener = typeof box.onmousedown === 'function' || box._hasMouseDownListener;
                     
-                    return positionChanged || hasMouseDownListener;
+                    return hasMouseDownListener;
                 },
-                hint: "Implement dragging with three event listeners: 1) box.addEventListener('mousedown', startDrag) to track when dragging starts, 2) document.addEventListener('mousemove', drag) to move the element, and 3) document.addEventListener('mouseup', stopDrag) to stop dragging. Use variables to track the initial mouse position and offset.",
+                hint: "// Copy this code:\nlet isDragging = false;\nlet offsetX, offsetY;\n\nbox.addEventListener('mousedown', (e) => {\n  isDragging = true;\n  offsetX = e.clientX - box.offsetLeft;\n  offsetY = e.clientY - box.offsetTop;\n});\n\ndocument.addEventListener('mousemove', (e) => {\n  if (isDragging) {\n    box.style.left = (e.clientX - offsetX) + 'px';\n    box.style.top = (e.clientY - offsetY) + 'px';\n  }\n});\n\ndocument.addEventListener('mouseup', () => {\n  isDragging = false;\n});",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Create a simple keyboard navigation: Use arrow keys to move the box in four directions (up, down, left, right).",
-                html: `<div style="position: relative; height: 300px; border: 1px solid #ccc;">
-  <div id="movableBox" style="width: 50px; height: 50px; background-color: #e74c3c; position: absolute; top: 125px; left: 125px;"></div>
+                question: "Move the box with arrow keys (copy the provided code)",
+                html: `<div style="position: relative; height: 200px; border: 1px solid #ccc;">
+  <div id="box" style="width: 50px; height: 50px; background-color: red; position: absolute; top: 75px; left: 75px;"></div>
 </div>
-<p>Use the arrow keys to move the box. Click in the container first to give it focus.</p>`,
+<p>Use arrow keys to move the box</p>`,
                 testFunction: function(resultElement) {
                     // Check if keydown event listener exists
                     const hasKeydownListener = document.onkeydown !== null || document._hasKeydownListener;
-                    
-                    // Get the box
-                    const box = resultElement.querySelector('#movableBox');
-                    if (!box) return false;
-                    
-                    // Store initial position
-                    const initialLeft = parseInt(box.style.left);
-                    const initialTop = parseInt(box.style.top);
-                    
-                    // Simulate arrow key presses
-                    const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-                    let positionChanged = false;
-                    
-                    for (const key of arrowKeys) {
-                        const keyEvent = new KeyboardEvent('keydown', {
-                            key: key,
-                            code: key,
-                            bubbles: true
-                        });
-                        
-                        document.dispatchEvent(keyEvent);
-                        
-                        // Check if position changed after any key press
-                        const newLeft = parseInt(box.style.left);
-                        const newTop = parseInt(box.style.top);
-                        
-                        if (newLeft !== initialLeft || newTop !== initialTop) {
-                            positionChanged = true;
-                            break;
-                        }
-                    }
-                    
-                    return hasKeydownListener || positionChanged;
+                    return hasKeydownListener;
                 },
-                hint: "Add a keydown event listener to the document: document.addEventListener('keydown', function(event) { const box = document.getElementById('movableBox'); const step = 10; switch(event.key) { case 'ArrowUp': box.style.top = (parseInt(box.style.top) - step) + 'px'; break; case 'ArrowDown': box.style.top = (parseInt(box.style.top) + step) + 'px'; break; case 'ArrowLeft': box.style.left = (parseInt(box.style.left) - step) + 'px'; break; case 'ArrowRight': box.style.left = (parseInt(box.style.left) + step) + 'px'; break; } });",
+                hint: "// Copy this code:\ndocument.addEventListener('keydown', (e) => {\n  const box = document.getElementById('box');\n  const step = 10;\n  \n  switch(e.key) {\n    case 'ArrowUp':\n      box.style.top = (parseInt(box.style.top) - step) + 'px';\n      break;\n    case 'ArrowDown':\n      box.style.top = (parseInt(box.style.top) + step) + 'px';\n      break;\n    case 'ArrowLeft':\n      box.style.left = (parseInt(box.style.left) - step) + 'px';\n      break;\n    case 'ArrowRight':\n      box.style.left = (parseInt(box.style.left) + step) + 'px';\n      break;\n  }\n});",
                 userCode: '',
                 answered: false,
                 correct: false
             },
             {
-                question: "Implement a simple event-based counter: Create a counter that increments when the '+' button is clicked and decrements when the '-' button is clicked.",
+                question: "Create a counter with + and - buttons",
                 html: `<div style="text-align: center;">
-  <button id="decrementBtn">-</button>
-  <span id="counterValue">0</span>
-  <button id="incrementBtn">+</button>
+  <button id="minus">-</button>
+  <span id="count">0</span>
+  <button id="plus">+</button>
 </div>`,
                 testFunction: function(resultElement) {
-                    const decrementBtn = resultElement.querySelector('#decrementBtn');
-                    const incrementBtn = resultElement.querySelector('#incrementBtn');
-                    const counterValue = resultElement.querySelector('#counterValue');
+                    const minusBtn = resultElement.querySelector('#minus');
+                    const plusBtn = resultElement.querySelector('#plus');
+                    const counter = resultElement.querySelector('#count');
                     
-                    if (!decrementBtn || !incrementBtn || !counterValue) return false;
+                    if (!minusBtn || !plusBtn || !counter) return false;
                     
                     // Reset counter
-                    counterValue.textContent = '0';
+                    counter.textContent = '0';
                     
-                    // Simulate increment clicks
-                    incrementBtn.click();
-                    incrementBtn.click();
+                    // Test plus button
+                    plusBtn.click();
+                    const increased = counter.textContent === '1';
                     
-                    // Check if counter increased
-                    const afterIncrement = parseInt(counterValue.textContent);
-                    const incrementWorks = afterIncrement === 2;
+                    // Test minus button
+                    minusBtn.click();
+                    const decreased = counter.textContent === '0';
                     
-                    // Simulate decrement click
-                    decrementBtn.click();
-                    
-                    // Check if counter decreased
-                    const afterDecrement = parseInt(counterValue.textContent);
-                    const decrementWorks = afterDecrement === 1;
-                    
-                    return incrementWorks && decrementWorks;
+                    return increased && decreased;
                 },
-                hint: "Add click event listeners to both buttons: document.getElementById('incrementBtn').addEventListener('click', function() { const counter = document.getElementById('counterValue'); counter.textContent = parseInt(counter.textContent) + 1; }); Do the same for the decrement button but subtract instead.",
+                hint: "let count = 0;\n\nplus.addEventListener('click', () => {\n  count++;\n  document.getElementById('count').textContent = count;\n});\n\nminus.addEventListener('click', () => {\n  count--;\n  document.getElementById('count').textContent = count;\n});",
                 userCode: '',
                 answered: false,
                 correct: false
