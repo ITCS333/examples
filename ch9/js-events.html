@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Events Tutorial</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --border-color: #ddd;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--dark-color);
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .section-body {
+            padding: 20px;
+        }
+        
+        .example {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .example-header {
+            background-color: #f0f0f0;
+            padding: 10px 15px;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .example-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .code-block {
+            background-color: #f8f8f8;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .demo-area {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .task {
+            background-color: #fffde7;
+            border-left: 3px solid #ffd600;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+        }
+        
+        .event-box {
+            width: 200px;
+            height: 200px;
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        
+        .event-log {
+            width: 100%;
+            height: 100px;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            overflow-y: auto;
+            font-family: monospace;
+            background-color: #f8f8f8;
+            margin-top: 10px;
+        }
+        
+        .key-info {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .key-box {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--light-color);
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        
+        .note {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid var(--primary-color);
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .section-header {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+            
+            .section-body {
+                padding: 15px;
+            }
+            
+            .example-body {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Events Tutorial</h1>
+    
+    <div class="section">
+        <div class="section-header">Introduction to Events</div>
+        <div class="section-body">
+            <p>JavaScript events are actions or occurrences that happen in the browser, such as a button click, page load, or key press. Events allow you to create interactive web pages by executing code when specific actions occur.</p>
+            
+            <div class="note">
+                <strong>Key Concepts:</strong>
+                <ul>
+                    <li><strong>Event:</strong> An action that occurs in the browser</li>
+                    <li><strong>Event Handler:</strong> A function that executes when an event occurs</li>
+                    <li><strong>Event Listener:</strong> A method that attaches an event handler to an element</li>
+                    <li><strong>Event Object:</strong> Contains information about the event that occurred</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">Basic Event Handling</div>
+        <div class="section-body">
+            <div class="example">
+                <div class="example-header">Example 1: Click Event</div>
+                <div class="example-body">
+                    <p>The most common event is the click event. Here's how to handle a button click:</p>
+                    
+                    <div class="code-block">// Method 1: Using addEventListener
+document.getElementById('myButton').addEventListener('click', function() {
+    alert('Button clicked!');
+});
+
+// Method 2: Using onclick property
+document.getElementById('myButton').onclick = function() {
+    alert('Button clicked!');
+};</div>
+                    
+                    <div class="demo-area">
+                        <button id="demoButton1">Click Me</button>
+                        <p id="demoOutput1">Click the button to see the result.</p>
+                    </div>
+                    
+                    <div class="task">
+                        <strong>Try it yourself:</strong> Use <code>addEventListener</code> to make the button change the text of the paragraph when clicked.
+                        <br><br>
+                        <strong>Required method:</strong> <code>addEventListener</code>
+                        <br>
+                        <strong>Required property:</strong> <code>textContent</code>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example">
+                <div class="example-header">Example 2: Multiple Event Listeners</div>
+                <div class="example-body">
+                    <p>You can add multiple event listeners to the same element:</p>
+                    
+                    <div class="code-block">const button = document.getElementById('multiButton');
+
+// First event listener
+button.addEventListener('click', function() {
+    console.log('First event listener');
+    document.getElementById('multiOutput').textContent += 'First action completed. ';
+});
+
+// Second event listener
+button.addEventListener('click', function() {
+    console.log('Second event listener');
+    document.getElementById('multiOutput').textContent += 'Second action completed. ';
+});</div>
+                    
+                    <div class="demo-area">
+                        <button id="multiButton">Click For Multiple Actions</button>
+                        <p id="multiOutput">Result will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">Mouse Events</div>
+        <div class="section-body">
+            <p>JavaScript provides various mouse events to detect different mouse interactions:</p>
+            <ul>
+                <li><code>click</code>: When the element is clicked</li>
+                <li><code>dblclick</code>: When the element is double-clicked</li>
+                <li><code>mousedown</code>: When a mouse button is pressed down on the element</li>
+                <li><code>mouseup</code>: When a mouse button is released over the element</li>
+                <li><code>mouseover</code>: When the mouse pointer moves onto the element</li>
+                <li><code>mouseout</code>: When the mouse pointer moves out of the element</li>
+                <li><code>mousemove</code>: When the mouse pointer moves while it's over the element</li>
+            </ul>
+            
+            <div class="example">
+                <div class="example-header">Example: Mouse Events Demo</div>
+                <div class="example-body">
+                    <div class="demo-area">
+                        <div id="mouseEventBox" class="event-box">Interact with me</div>
+                        <div id="mouseEventLog" class="event-log">Mouse events will be logged here...</div>
+                    </div>
+                    
+                    <div class="code-block">const box = document.getElementById('mouseEventBox');
+const log = document.getElementById('mouseEventLog');
+
+function logEvent(eventType) {
+    log.innerHTML = eventType + ' event detected<br>' + log.innerHTML;
+}
+
+// Add event listeners for different mouse events
+box.addEventListener('click', () => logEvent('click'));
+box.addEventListener('dblclick', () => logEvent('dblclick'));
+box.addEventListener('mousedown', () => logEvent('mousedown'));
+box.addEventListener('mouseup', () => logEvent('mouseup'));
+box.addEventListener('mouseover', () => logEvent('mouseover'));
+box.addEventListener('mouseout', () => logEvent('mouseout'));
+box.addEventListener('mousemove', () => logEvent('mousemove'));</div>
+                    
+                    <div class="task">
+                        <strong>Try it yourself:</strong> Add a <code>mouseenter</code> event listener to the box that changes its background color to yellow.
+                        <br><br>
+                        <strong>Required method:</strong> <code>addEventListener</code> with 'mouseenter' event
+                        <br>
+                        <strong>Required property:</strong> <code>style.backgroundColor</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">Keyboard Events</div>
+        <div class="section-body">
+            <p>Keyboard events are triggered when users interact with the keyboard:</p>
+            <ul>
+                <li><code>keydown</code>: When a key is pressed down</li>
+                <li><code>keyup</code>: When a key is released</li>
+                <li><code>keypress</code>: When a key is pressed (character keys only)</li>
+            </ul>
+            
+            <div class="example">
+                <div class="example-header">Example: Keyboard Events</div>
+                <div class="example-body">
+                    <div class="demo-area">
+                        <p>Click in the input field below and press any key:</p>
+                        <input type="text" id="keyboardInput" placeholder="Type here...">
+                        
+                        <div class="key-info">
+                            <div class="key-box">
+                                <strong>Key:</strong>
+                                <div id="keyPressed">-</div>
+                            </div>
+                            <div class="key-box">
+                                <strong>Code:</strong>
+                                <div id="keyCode">-</div>
+                            </div>
+                            <div class="key-box">
+                                <strong>Which:</strong>
+                                <div id="keyWhich">-</div>
+                            </div>
+                        </div>
+                        
+                        <div id="keyEventLog" class="event-log">Keyboard events will be logged here...</div>
+                    </div>
+                    
+                    <div class="code-block">const keyInput = document.getElementById('keyboardInput');
+const keyPressed = document.getElementById('keyPressed');
+const keyCode = document.getElementById('keyCode');
+const keyWhich = document.getElementById('keyWhich');
+const keyLog = document.getElementById('keyEventLog');
+
+function logKeyEvent(event) {
+    // Display key information
+    keyPressed.textContent = event.key;
+    keyCode.textContent = event.code;
+    keyWhich.textContent = event.which || event.keyCode;
+    
+    // Log the event
+    keyLog.innerHTML = `${event.type}: ${event.key} (${event.code})<br>` + keyLog.innerHTML;
+}
+
+// Add event listeners for keyboard events
+keyInput.addEventListener('keydown', logKeyEvent);
+keyInput.addEventListener('keyup', logKeyEvent);</div>
+                    
+                    <div class="task">
+                        <strong>Try it yourself:</strong> Add a <code>keypress</code> event listener to the input that counts how many times a key has been pressed and displays the count.
+                        <br><br>
+                        <strong>Required method:</strong> <code>addEventListener</code> with 'keypress' event
+                        <br>
+                        <strong>Required property:</strong> <code>textContent</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">The Event Object</div>
+        <div class="section-body">
+            <p>When an event occurs, JavaScript automatically passes an event object to the event handler function. This object contains useful information about the event.</p>
+            
+            <div class="example">
+                <div class="example-header">Example: Using the Event Object</div>
+                <div class="example-body">
+                    <div class="code-block">// The event object is automatically passed to the event handler
+element.addEventListener('click', function(event) {
+    // Common event object properties
+    console.log(event.type);      // Type of event (e.g., "click")
+    console.log(event.target);    // Element that triggered the event
+    console.log(event.currentTarget); // Element that the event listener is attached to
+    console.log(event.clientX);   // X coordinate of the mouse pointer
+    console.log(event.clientY);   // Y coordinate of the mouse pointer
+    
+    // Prevent default behavior
+    event.preventDefault();
+    
+    // Stop event propagation
+    event.stopPropagation();
+});</div>
+                    
+                    <div class="demo-area">
+                        <div id="eventObjectDemo" class="event-box">Click anywhere in this box</div>
+                        <div id="eventObjectLog" class="event-log">Event information will appear here...</div>
+                    </div>
+                    
+                    <div class="task">
+                        <strong>Try it yourself:</strong> Modify the event handler to display the exact coordinates where the user clicked inside the box.
+                        <br><br>
+                        <strong>Required properties:</strong> <code>event.offsetX</code> and <code>event.offsetY</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">Form Events</div>
+        <div class="section-body">
+            <p>Form events are triggered when users interact with form elements:</p>
+            <ul>
+                <li><code>submit</code>: When a form is submitted</li>
+                <li><code>reset</code>: When a form is reset</li>
+                <li><code>change</code>: When the value of an input element changes</li>
+                <li><code>focus</code>: When an element receives focus</li>
+                <li><code>blur</code>: When an element loses focus</li>
+                <li><code>input</code>: When the value of an input/textarea changes</li>
+            </ul>
+            
+            <div class="example">
+                <div class="example-header">Example: Form Events</div>
+                <div class="example-body">
+                    <div class="demo-area">
+                        <form id="demoForm">
+                            <div class="form-group">
+                                <label for="nameInput">Name:</label>
+                                <input type="text" id="nameInput" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="commentInput">Comment:</label>
+                                <textarea id="commentInput" name="comment"></textarea>
+                            </div>
+                            <button type="submit">Submit</button>
+                            <button type="reset">Reset</button>
+                        </form>
+                        <div id="formEventLog" class="event-log">Form events will be logged here...</div>
+                    </div>
+                    
+                    <div class="code-block">const form = document.getElementById('demoForm');
+const nameInput = document.getElementById('nameInput');
+const commentInput = document.getElementById('commentInput');
+const formLog = document.getElementById('formEventLog');
+
+function logFormEvent(event) {
+    formLog.innerHTML = `${event.type} event on ${event.target.name || event.target.id}<br>` + formLog.innerHTML;
+}
+
+// Form events
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    logFormEvent(event);
+    formLog.innerHTML = `Form submitted with name: ${nameInput.value}<br>` + formLog.innerHTML;
+});
+
+form.addEventListener('reset', function(event) {
+    logFormEvent(event);
+});
+
+// Input events
+nameInput.addEventListener('focus', logFormEvent);
+nameInput.addEventListener('blur', logFormEvent);
+nameInput.addEventListener('input', logFormEvent);
+
+commentInput.addEventListener('change', logFormEvent);</div>
+                    
+                    <div class="task">
+                        <strong>Try it yourself:</strong> Add a <code>change</code> event listener to the name input that displays a message when the input value changes and the input loses focus.
+                        <br><br>
+                        <strong>Required method:</strong> <code>addEventListener</code> with 'change' event
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">Event Propagation</div>
+        <div class="section-body">
+            <p>When an event occurs on an element, it first runs the handlers on it, then on its parent, and so on up the DOM tree. This is called "bubbling".</p>
+            
+            <div class="example">
+                <div class="example-header">Example: Event Bubbling and Capturing</div>
+                <div class="example-body">
+                    <div class="demo-area" style="position: relative;">
+                        <div id="outer" style="padding: 25px; background-color: #f0f0f0; border: 1px solid #ccc;">
+                            OUTER
+                            <div id="middle" style="padding: 25px; background-color: #e0e0e0; border: 1px solid #ccc;">
+                                MIDDLE
+                                <div id="inner" style="padding: 25px; background-color: #d0d0d0; border: 1px solid #ccc;">
+                                    INNER
+                                </div>
+                            </div>
+                        </div>
+                        <div id="propagationLog" class="event-log">Click on any box to see event propagation...</div>
+                    </div>
+                    
+                    <div class="code-block">const outer = document.getElementById('outer');
+const middle = document.getElementById('middle');
+const inner = document.getElementById('inner');
+const propLog = document.getElementById('propagationLog');
+
+function logPropagation(event) {
+    propLog.innerHTML = `Event on ${event.currentTarget.id} (${event.eventPhase})<br>` + propLog.innerHTML;
+}
+
+// Bubbling phase (default)
+outer.addEventListener('click', logPropagation);
+middle.addEventListener('click', logPropagation);
+inner.addEventListener('click', logPropagation);
+
+// To stop propagation
+inner.addEventListener('click', function(event) {
+    propLog.innerHTML = `Stopping propagation at INNER<br>` + propLog.innerHTML;
+    event.stopPropagation();
+}, false);</div>
+                    
+                    <div class="note">
+                        <strong>Event Phases:</strong>
+                        <ol>
+                            <li><strong>Capturing Phase:</strong> The event goes down to the element (rarely used)</li>
+                            <li><strong>Target Phase:</strong> The event reaches the target element</li>
+                            <li><strong>Bubbling Phase:</strong> The event bubbles up from the element</li>
+                        </ol>
+                        <p>To use the capturing phase, set the third parameter of addEventListener to true.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Example 1: Click Event
+        document.getElementById('demoButton1').addEventListener('click', function() {
+            document.getElementById('demoOutput1').textContent = 'Button was clicked!';
+        });
+        
+        // Example 2: Multiple Event Listeners
+        const multiButton = document.getElementById('multiButton');
+        
+        multiButton.addEventListener('click', function() {
+            document.getElementById('multiOutput').textContent += 'First action completed. ';
+        });
+        
+        multiButton.addEventListener('click', function() {
+            document.getElementById('multiOutput').textContent += 'Second action completed. ';
+        });
+        
+        // Mouse Events Demo
+        const mouseBox = document.getElementById('mouseEventBox');
+        const mouseLog = document.getElementById('mouseEventLog');
+        
+        function logMouseEvent(eventType) {
+            mouseLog.innerHTML = eventType + ' event detected<br>' + mouseLog.innerHTML;
+            
+            // Limit log length
+            if (mouseLog.innerHTML.length > 1000) {
+                mouseLog.innerHTML = mouseLog.innerHTML.substring(0, 1000);
+            }
+        }
+        
+        mouseBox.addEventListener('click', () => logMouseEvent('click'));
+        mouseBox.addEventListener('dblclick', () => logMouseEvent('dblclick'));
+        mouseBox.addEventListener('mousedown', () => logMouseEvent('mousedown'));
+        mouseBox.addEventListener('mouseup', () => logMouseEvent('mouseup'));
+        mouseBox.addEventListener('mouseover', () => logMouseEvent('mouseover'));
+        mouseBox.addEventListener('mouseout', () => logMouseEvent('mouseout'));
+        
+        // Limit mousemove logging to prevent overwhelming the log
+        let mouseMoveThrottle = false;
+        mouseBox.addEventListener('mousemove', () => {
+            if (!mouseMoveThrottle) {
+                logMouseEvent('mousemove');
+                mouseMoveThrottle = true;
+                setTimeout(() => { mouseMoveThrottle = false; }, 100);
+            }
+        });
+        
+        // Keyboard Events
+        const keyInput = document.getElementById('keyboardInput');
+        const keyPressed = document.getElementById('keyPressed');
+        const keyCode = document.getElementById('keyCode');
+        const keyWhich = document.getElementById('keyWhich');
+        const keyLog = document.getElementById('keyEventLog');
+        
+        function logKeyEvent(event) {
+            // Display key information
+            keyPressed.textContent = event.key;
+            keyCode.textContent = event.code;
+            keyWhich.textContent = event.which || event.keyCode;
+            
+            // Log the event
+            keyLog.innerHTML = `${event.type}: ${event.key} (${event.code})<br>` + keyLog.innerHTML;
+            
+            // Limit log length
+            if (keyLog.innerHTML.length > 1000) {
+                keyLog.innerHTML = keyLog.innerHTML.substring(0, 1000);
+            }
+        }
+        
+        keyInput.addEventListener('keydown', logKeyEvent);
+        keyInput.addEventListener('keyup', logKeyEvent);
+        
+        // Event Object Demo
+        const eventObjectDemo = document.getElementById('eventObjectDemo');
+        const eventObjectLog = document.getElementById('eventObjectLog');
+        
+        eventObjectDemo.addEventListener('click', function(event) {
+            eventObjectLog.innerHTML = `
+                Event Type: ${event.type}<br>
+                Target: ${event.target.id}<br>
+                X Position: ${event.clientX}px<br>
+                Y Position: ${event.clientY}px<br>
+                Relative to viewport: (${event.clientX}, ${event.clientY})<br>
+                Relative to target: (${event.offsetX}, ${event.offsetY})<br>
+            ` + eventObjectLog.innerHTML;
+            
+            // Limit log length
+            if (eventObjectLog.innerHTML.length > 1000) {
+                eventObjectLog.innerHTML = eventObjectLog.innerHTML.substring(0, 1000);
+            }
+        });
+        
+        // Form Events
+        const form = document.getElementById('demoForm');
+        const nameInput = document.getElementById('nameInput');
+        const commentInput = document.getElementById('commentInput');
+        const formLog = document.getElementById('formEventLog');
+        
+        function logFormEvent(event) {
+            formLog.innerHTML = `${event.type} event on ${event.target.name || event.target.id}<br>` + formLog.innerHTML;
+            
+            // Limit log length
+            if (formLog.innerHTML.length > 1000) {
+                formLog.innerHTML = formLog.innerHTML.substring(0, 1000);
+            }
+        }
+        
+        // Form events
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            logFormEvent(event);
+            formLog.innerHTML = `Form submitted with name: ${nameInput.value}<br>` + formLog.innerHTML;
+        });
+        
+        form.addEventListener('reset', function(event) {
+            logFormEvent(event);
+        });
+        
+        // Input events
+        nameInput.addEventListener('focus', logFormEvent);
+        nameInput.addEventListener('blur', logFormEvent);
+        nameInput.addEventListener('input', logFormEvent);
+        
+        commentInput.addEventListener('change', logFormEvent);
+        
+        // Event Propagation
+        const outer = document.getElementById('outer');
+        const middle = document.getElementById('middle');
+        const inner = document.getElementById('inner');
+        const propLog = document.getElementById('propagationLog');
+        
+        function logPropagation(event) {
+            let phase = "";
+            switch(event.eventPhase) {
+                case 1: phase = "Capture"; break;
+                case 2: phase = "Target"; break;
+                case 3: phase = "Bubble"; break;
+            }
+            
+            propLog.innerHTML = `Event on ${event.currentTarget.id} (Phase: ${phase})<br>` + propLog.innerHTML;
+            
+            // Limit log length
+            if (propLog.innerHTML.length > 1000) {
+                propLog.innerHTML = propLog.innerHTML.substring(0, 1000);
+            }
+        }
+        
+        // Bubbling phase (default)
+        outer.addEventListener('click', logPropagation);
+        middle.addEventListener('click', logPropagation);
+        inner.addEventListener('click', logPropagation);
+        
+        // To stop propagation
+        inner.addEventListener('click', function(event) {
+            propLog.innerHTML = `Stopping propagation at INNER<br>` + propLog.innerHTML;
+            event.stopPropagation();
+        }, false);
+    </script>
+</body>
+</html>
