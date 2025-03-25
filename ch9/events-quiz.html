@@ -444,6 +444,38 @@
                 correct: false
             },
             {
+                question: "Create a counter with + and - buttons",
+                html: `<div style="text-align: center;">
+  <button id="minus">-</button>
+  <span id="count">0</span>
+  <button id="plus">+</button>
+</div>`,
+                testFunction: function(resultElement) {
+                    const minusBtn = resultElement.querySelector('#minus');
+                    const plusBtn = resultElement.querySelector('#plus');
+                    const counter = resultElement.querySelector('#count');
+                    
+                    if (!minusBtn || !plusBtn || !counter) return false;
+                    
+                    // Reset counter
+                    counter.textContent = '0';
+                    
+                    // Test plus button
+                    plusBtn.click();
+                    const increased = counter.textContent === '1';
+                    
+                    // Test minus button
+                    minusBtn.click();
+                    const decreased = counter.textContent === '0';
+                    
+                    return increased && decreased;
+                },
+                hint: "let count = 0;\n\nplus.addEventListener('click', () => {\n  count++;\n  document.getElementById('count').textContent = count;\n});\n\nminus.addEventListener('click', () => {\n  count--;\n  document.getElementById('count').textContent = count;\n});",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
                 question: "Use event delegation: Add one click listener to the list",
                 html: `<div>
   <ul id="list">
@@ -535,7 +567,7 @@
                 correct: false
             },
             {
-                question: "Make the box draggable (copy the provided code)",
+                question: "Make the box draggable (click Show Hint for code)",
                 html: `<div>
   <div id="box" style="width: 100px; height: 100px; background-color: #3498db; position: absolute; top: 50px; left: 50px; cursor: move; color: white; text-align: center; line-height: 100px;">
     Drag me
@@ -557,7 +589,7 @@
                 correct: false
             },
             {
-                question: "Move the box with arrow keys (copy the provided code)",
+                question: "Move the box with arrow keys (click Show Hint for code)",
                 html: `<div style="position: relative; height: 200px; border: 1px solid #ccc;">
   <div id="box" style="width: 50px; height: 50px; background-color: red; position: absolute; top: 75px; left: 75px;"></div>
 </div>
@@ -572,38 +604,6 @@
                 answered: false,
                 correct: false
             },
-            {
-                question: "Create a counter with + and - buttons",
-                html: `<div style="text-align: center;">
-  <button id="minus">-</button>
-  <span id="count">0</span>
-  <button id="plus">+</button>
-</div>`,
-                testFunction: function(resultElement) {
-                    const minusBtn = resultElement.querySelector('#minus');
-                    const plusBtn = resultElement.querySelector('#plus');
-                    const counter = resultElement.querySelector('#count');
-                    
-                    if (!minusBtn || !plusBtn || !counter) return false;
-                    
-                    // Reset counter
-                    counter.textContent = '0';
-                    
-                    // Test plus button
-                    plusBtn.click();
-                    const increased = counter.textContent === '1';
-                    
-                    // Test minus button
-                    minusBtn.click();
-                    const decreased = counter.textContent === '0';
-                    
-                    return increased && decreased;
-                },
-                hint: "let count = 0;\n\nplus.addEventListener('click', () => {\n  count++;\n  document.getElementById('count').textContent = count;\n});\n\nminus.addEventListener('click', () => {\n  count--;\n  document.getElementById('count').textContent = count;\n});",
-                userCode: '',
-                answered: false,
-                correct: false
-            }
         ];
 
         // Quiz state
