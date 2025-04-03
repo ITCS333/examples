@@ -364,18 +364,18 @@
                 correct: false
             },
             {
-                question: "Create an image with src='photo.jpg', alt='Profile Photo' and width='200'",
+                question: "Create an image with src='https://picsum.photos/200', alt='Random Image' and width='200'",
                 html: `<div>
   <!-- Add your image here -->
 </div>`,
                 testFunction: function(resultElement) {
                     const img = resultElement.querySelector('img');
                     return img && 
-                           img.src.includes('photo.jpg') && 
-                           img.alt === 'Profile Photo' && 
+                           img.src.includes('picsum.photos/200') && 
+                           img.alt === 'Random Image' && 
                            (img.width == 200 || img.getAttribute('width') == '200');
                 },
-                hint: "<img src=\"photo.jpg\" alt=\"Profile Photo\" width=\"200\">",
+                hint: "<img src=\"https://picsum.photos/200\" alt=\"Random Image\" width=\"200\">",
                 userCode: '',
                 answered: false,
                 correct: false
