@@ -487,18 +487,18 @@
                 correct: false
             },
             {
-                question: "Use a pseudo-class to style links differently when hovered (make them underlined)",
+                question: "Use a pseudo-class to style links differently when hovered (make them scale 1.2 times larger)",
                 html: `<div>
-  <a href="#" id="test-link">Hover over me</a>
+  <a href="#" id="test-link" style="display: inline-block; text-decoration: none;">Hover over me</a>
 </div>`,
                 css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const hoverRule = style.match(/a:hover/i);
-                    const hasUnderline = style.match(/text-decoration:\s*underline/i);
-                    return !!hoverRule && !!hasUnderline;
+                    const hasTransform = style.match(/transform:\s*scale\(\s*1\.2\s*\)/i);
+                    return !!hoverRule && !!hasTransform;
                 },
-                hint: "a:hover {\n  text-decoration: underline;\n}",
+                hint: "a:hover {\n  transform: scale(1.2);\n}\n\n/* Note: You can see this effect in the preview when you run your code and hover over the link */",
                 userCode: '',
                 answered: false,
                 correct: false
