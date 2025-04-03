@@ -285,8 +285,8 @@
     
     <div id="quizContainer" class="quiz-container">
         <div class="quiz-header">
-            <div>Question <span id="questionNumber">1</span> of <span id="totalQuestions">10</span></div>
-            <div>Score: <span id="currentScore">0</span>/<span id="totalQuestions2">10</span></div>
+            <div>Question <span id="questionNumber">1</span> of <span id="totalQuestions">12</span></div>
+            <div>Score: <span id="currentScore">0</span>/<span id="totalQuestions2">12</span></div>
         </div>
         
         <div class="question-nav" id="questionNav">
@@ -518,6 +518,47 @@
                     return header && main && footer;
                 },
                 hint: "<article>\n  <header>\n    <h2>Article Title</h2>\n  </header>\n  <section>\n    <p>Main content goes here.</p>\n  </section>\n  <footer>\n    <p>Article footer</p>\n  </footer>\n</article>",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create a form with a required email input field that has validation for email format",
+                html: `<div>
+  <!-- Add your validated form here -->
+</div>`,
+                testFunction: function(resultElement) {
+                    const form = resultElement.querySelector('form');
+                    if (!form) return false;
+                    
+                    const emailInput = form.querySelector('input[type="email"]');
+                    if (!emailInput) return false;
+                    
+                    const hasRequired = emailInput.hasAttribute('required');
+                    
+                    return hasRequired;
+                },
+                hint: "<form>\n  <input type=\"email\" required placeholder=\"Enter your email\">\n  <button type=\"submit\">Submit</button>\n</form>",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create properly nested HTML with a navigation menu containing 3 list items inside an unordered list",
+                html: `<header>
+  <!-- Add your nested navigation here -->
+</header>`,
+                testFunction: function(resultElement) {
+                    const nav = resultElement.querySelector('nav');
+                    if (!nav) return false;
+                    
+                    const ul = nav.querySelector('ul');
+                    if (!ul) return false;
+                    
+                    const items = ul.querySelectorAll('li');
+                    return items.length >= 3;
+                },
+                hint: "<nav>\n  <ul>\n    <li>Home</li>\n    <li>About</li>\n    <li>Contact</li>\n  </ul>\n</nav>",
                 userCode: '',
                 answered: false,
                 correct: false
