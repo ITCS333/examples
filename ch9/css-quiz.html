@@ -345,8 +345,7 @@
   <p>This is another normal paragraph.</p>
   <p class="highlight">This should also have a yellow background.</p>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const highlightRule = style.match(/\.highlight\s*{[^}]*background(-color)?:\s*yellow/i);
@@ -364,8 +363,7 @@
   <p>This is a normal paragraph.</p>
   <h2>This is a normal heading.</h2>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const idRule = style.match(/#header\s*{[^}]*color:\s*(blue|#0000ff|rgb\(\s*0\s*,\s*0\s*,\s*255\s*\)|rgba\(\s*0\s*,\s*0\s*,\s*255\s*,\s*1\s*\))/i);
@@ -390,8 +388,7 @@
   <li>This is a normal list item</li>
   <li>This should not have a gray background</li>
 </ul>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const descendantRule = style.match(/nav\s+li|nav\s+ul\s+li/i);
@@ -412,8 +409,7 @@
   </div>
   <p>This paragraph should have a red border</p>
 </section>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const childRule = style.match(/section\s*>\s*p/i);
@@ -435,8 +431,7 @@
   <h2>Another heading</h2>
   <p>This paragraph should have a top margin of 20px</p>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const siblingRule = style.match(/h[1-6]\s*\+\s*p/i);
@@ -459,8 +454,7 @@
     <p>This paragraph should NOT be italic (different parent)</p>
   </div>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const generalSiblingRule = style.match(/h[1-6]\s*~\s*p/i);
@@ -480,8 +474,7 @@
   <a href="https://example.org">Another regular link</a>
   <a href="https://example.org" target="_blank">Also opens in new tab (should be green)</a>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const attributeRule = style.match(/a\[target=["']?_blank["']?\]/i);
@@ -498,8 +491,7 @@
                 html: `<div>
   <a href="#" id="test-link">Hover over me</a>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const hoverRule = style.match(/a:hover/i);
@@ -549,8 +541,7 @@ td {
   <li>Second item</li>
   <li>Third item</li>
 </ul>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const beforeRule = style.match(/\.star-list\s+li::before/i);
@@ -568,8 +559,7 @@ td {
   <p>This paragraph should use the variable color</p>
   <p>This paragraph should also use the variable color</p>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const variableDefinition = style.match(/:root\s*{[^}]*--[a-z0-9-]+:\s*[^;]+;/i);
@@ -588,8 +578,7 @@ td {
     This box should have width: calc(100% - 40px)
   </div>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const calcRule = style.match(/\.box\s*{[^}]*width:\s*calc\(\s*100%\s*-\s*40px\s*\)/i);
@@ -605,8 +594,7 @@ td {
                 html: `<div>
   <p>This text should change color on small screens</p>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const mediaQuery = style.match(/@media\s*\(\s*max-width:\s*600px\s*\)/i);
@@ -625,8 +613,7 @@ td {
     Center me!
   </div>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const flexDisplay = style.match(/\.flex-container\s*{[^}]*display:\s*flex/i);
@@ -647,8 +634,7 @@ td {
   <div style="background-color: lightyellow; padding: 20px;">Item 3</div>
   <div style="background-color: lightpink; padding: 20px;">Item 4</div>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const gridDisplay = style.match(/\.grid-container\s*{[^}]*display:\s*grid/i);
@@ -668,8 +654,7 @@ td {
     Rotate me!
   </div>
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const transformRule = style.match(/\.rotated-box\s*{[^}]*transform:\s*rotate\(\s*45deg\s*\)/i);
@@ -685,8 +670,7 @@ td {
                 html: `<div class="animated-box" style="width: 100px; height: 100px;">
   Animate me!
 </div>`,
-                css: `/* Add your CSS here */
-`,
+                css: ``,
                 testFunction: function(styleElement) {
                     const style = styleElement.textContent;
                     const keyframesRule = style.match(/@keyframes\s+[a-z0-9-]+\s*{[^}]*}/i);
