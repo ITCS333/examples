@@ -1,4 +1,4 @@
-# Chapter 8: Introduction to JavaScript
+# Chapter 9: JavaScript DOM and Events
 
 This chapter has the following examples:
 1. [Example 1](https://itcs333.github.io/examples/ch9/dom-manipulation.html): JavaScript DOM Manipulation.
