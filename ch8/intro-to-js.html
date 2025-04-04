@@ -270,6 +270,7 @@
             <div class="button-container">
                 <button id="checkButton">Check Answer</button>
                 <button id="resetButton">Reset Code</button>
+                <button id="runButton">Run Code</button>
             </div>
             
             <div class="navigation-container">
@@ -538,6 +539,31 @@
             questions[currentQuestion].userCode = codeEditor.value;
         }
 
+        // Run the user's code
+        function runCode() {
+            saveCurrentAnswer();
+            
+            const userCode = questions[currentQuestion].userCode.trim();
+            
+            if (userCode === '') {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = 'Please write some code before running.';
+                return;
+            }
+            
+            try {
+                // Create a new function to evaluate the code in isolation
+                const func = new Function(userCode);
+                func();
+                
+                feedbackElement.className = 'feedback';
+                feedbackElement.textContent = 'Code executed. Check the console for any output.';
+            } catch (error) {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = `Error: ${error.message}`;
+            }
+        }
+
         // Check the answer
         function checkAnswer() {
             saveCurrentAnswer();
@@ -627,6 +653,7 @@
         // Event listeners
         checkButton.addEventListener('click', checkAnswer);
         resetButton.addEventListener('click', resetCode);
+        runButton.addEventListener('click', runCode);
         prevButton.addEventListener('click', prevQuestion);
         nextButton.addEventListener('click', nextQuestion);
         hintButton.addEventListener('click', showHint);
