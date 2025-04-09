@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Fetch API Playground</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .playground {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-bottom: 30px;
+        }
+        .code-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            background-color: #fff;
+            min-height: 100px;
+            overflow: auto;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: monospace;
+        }
+        .hint {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Fetch API Playground</h1>
+    
+    <div class="container">
+        <div class="playground">
+            <h2>Example 1: Basic Fetch with Promises</h2>
+            <p>Edit the URL below to fetch data from different APIs. Try using public APIs like:</p>
+            <ul>
+                <li>https://jsonplaceholder.typicode.com/posts/1</li>
+                <li>https://jsonplaceholder.typicode.com/users</li>
+                <li>https://api.github.com/users/octocat</li>
+            </ul>
+            
+            <div class="code-area">
+                <textarea id="fetch-code">// Basic fetch example using promises
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // This is where you process the data
+    displayOutput(data);
+  })
+  .catch(error => {
+    displayOutput('Error: ' + error.message);
+  });</textarea>
+                <button onclick="runFetchCode()">Run Fetch</button>
+            </div>
+            
+            <h3>Process the Data</h3>
+            <p>Write code to process and display the fetched data:</p>
+            <div class="code-area">
+                <textarea id="process-code">// Process and display the data
+function displayOutput(data) {
+  // Convert the data to a formatted string
+  const formattedData = JSON.stringify(data, null, 2);
+  
+  // Display in the output area
+  document.getElementById('output1').innerHTML = `<pre>${formattedData}</pre>`;
+}</textarea>
+            </div>
+            
+            <h3>Output:</h3>
+            <div id="output1" class="output">Results will appear here...</div>
+        </div>
+        
+        <div class="playground">
+            <h2>Example 2: Fetch with Async/Await</h2>
+            <p>The same functionality using async/await for cleaner code:</p>
+            
+            <div class="code-area">
+                <textarea id="async-code">// Async/await fetch example
+async function fetchData(url) {
+  try {
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error('Fetch error: ' + error.message);
+  }
+}
+
+// Call the async function
+async function runAsyncFetch() {
+  try {
+    const url = 'https://jsonplaceholder.typicode.com/users';
+    const data = await fetchData(url);
+    processAsyncData(data);
+  } catch (error) {
+    document.getElementById('output2').innerHTML = `<p style="color: red;">${error.message}</p>`;
+  }
+}</textarea>
+                <button onclick="runAsyncCode()">Run Async Fetch</button>
+            </div>
+            
+            <h3>Process the Data</h3>
+            <p>Write code to process and display the fetched data:</p>
+            <div class="code-area">
+                <textarea id="process-async-code">// Process and display the data from async fetch
+function processAsyncData(data) {
+  // Example: Create a list of user names
+  let html = '<h4>Users:</h4><ul>';
+  
+  if (Array.isArray(data)) {
+    data.forEach(user => {
+      html += `<li>${user.name} (${user.email})</li>`;
+    });
+  } else {
+    html += `<li>${JSON.stringify(data)}</li>`;
+  }
+  
+  html += '</ul>';
+  document.getElementById('output2').innerHTML = html;
+}</textarea>
+            </div>
+            
+            <h3>Output:</h3>
+            <div id="output2" class="output">Results will appear here...</div>
+        </div>
+        
+        <div class="playground">
+            <h2>Example 3: Advanced Fetch with Options</h2>
+            <p>Customize your fetch request with headers, method, body, etc:</p>
+            
+            <div class="code-area">
+                <textarea id="advanced-code">// Advanced fetch with options
+async function advancedFetch() {
+  const url = 'https://jsonplaceholder.typicode.com/posts';
+  
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Custom-Header': 'CustomValue'
+    },
+    body: JSON.stringify({
+      title: 'My New Post',
+      body: 'This is the content of my post',
+      userId: 1
+    })
+  };
+  
+  try {
+    const response = await fetch(url, options);
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const data = await response.json();
+    processAdvancedData(data);
+  } catch (error) {
+    document.getElementById('output3').innerHTML = `<p style="color: red;">${error.message}</p>`;
+  }
+}</textarea>
+                <button onclick="runAdvancedCode()">Run Advanced Fetch</button>
+            </div>
+            
+            <h3>Process the Data</h3>
+            <p>Write code to process and display the fetched data:</p>
+            <div class="code-area">
+                <textarea id="process-advanced-code">// Process and display the data from advanced fetch
+function processAdvancedData(data) {
+  let html = '<h4>POST Request Response:</h4>';
+  html += '<div class="response-details">';
+  html += `<p><strong>Status:</strong> Success</p>`;
+  html += `<p><strong>Created Post ID:</strong> ${data.id}</p>`;
+  html += `<p><strong>Title:</strong> ${data.title}</p>`;
+  html += `<p><strong>Body:</strong> ${data.body}</p>`;
+  html += `<p><strong>User ID:</strong> ${data.userId}</p>`;
+  html += '</div>';
+  
+  document.getElementById('output3').innerHTML = html;
+}</textarea>
+            </div>
+            
+            <h3>Output:</h3>
+            <div id="output3" class="output">Results will appear here...</div>
+        </div>
+    </div>
+    
+    <div class="hint">
+        <h3>Tips for Working with Fetch API</h3>
+        <ul>
+            <li>The fetch API returns a Promise that resolves to the Response object.</li>
+            <li>You need to call methods like .json() or .text() on the Response to get the actual data.</li>
+            <li>These methods also return Promises, which is why we need another .then() or await.</li>
+            <li>Always check if response.ok is true to handle HTTP error responses.</li>
+            <li>Use try/catch blocks with async/await to handle errors properly.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Function to run the basic fetch code
+        function runFetchCode() {
+            const fetchCode = document.getElementById('fetch-code').value;
+            const processCode = document.getElementById('process-code').value;
+            
+            try {
+                // First evaluate the process code to define the displayOutput function
+                eval(processCode);
+                
+                // Then evaluate the fetch code
+                eval(fetchCode);
+            } catch (error) {
+                document.getElementById('output1').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Function to run the async/await code
+        function runAsyncCode() {
+            const asyncCode = document.getElementById('async-code').value;
+            const processCode = document.getElementById('process-async-code').value;
+            
+            try {
+                // First evaluate the process code
+                eval(processCode);
+                
+                // Then evaluate the async code
+                eval(asyncCode);
+                
+                // Call the function defined in the code
+                runAsyncFetch();
+            } catch (error) {
+                document.getElementById('output2').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Function to run the advanced fetch code
+        function runAdvancedCode() {
+            const advancedCode = document.getElementById('advanced-code').value;
+            const processCode = document.getElementById('process-advanced-code').value;
+            
+            try {
+                // First evaluate the process code
+                eval(processCode);
+                
+                // Then evaluate the advanced code
+                eval(advancedCode);
+                
+                // Call the function defined in the code
+                advancedFetch();
+            } catch (error) {
+                document.getElementById('output3').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
