@@ -201,7 +201,9 @@ function processAsyncData(data) {
   
   if (Array.isArray(data)) {
     data.forEach(user => {
-      html += `<li>${user.name} (${user.email})</li>`;
+      const name = user.name || 'Unknown';
+      const email = user.email || 'No email';
+      html += `<li>${name} (${email})</li>`;
     });
   } else {
     html += `<li>${JSON.stringify(data)}</li>`;
