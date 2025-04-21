@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Fundamentals Exercises</title>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --neutral-color: #f5f5f5;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--text-color);
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+        
+        .quiz-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quiz-body {
+            padding: 20px;
+        }
+        
+        .quiz-question {
+            margin-bottom: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .code-editor {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            margin-bottom: 15px;
+            resize: vertical;
+            background-color: #f8f8f8;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .navigation-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        button:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .feedback {
+            margin: 15px 0px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+            display: block;
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+            display: block;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .hints {
+            margin: 10px 0px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .hint-text {
+            display: none;
+            margin: 10px 0px;
+            padding: 10px;
+            background-color: #fffde7;
+            border-left: 3px solid #ffd600;
+        }
+        
+        .hint-button {
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 10px 0px;
+        }
+        
+        .question-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .question-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            color: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .question-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .question-btn.current {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .question-btn.answered {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .nav-btn {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .quiz-header {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+            
+            .quiz-body {
+                padding: 15px;
+            }
+            
+            button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .code-editor {
+                min-height: 80px;
+            }
+            
+            .question-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            
+            .navigation-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .navigation-container button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>PHP Fundamentals Exercises</h1>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <div>Question <span id="questionNumber">1</span> of <span id="totalQuestions">10</span></div>
+            <div>Score: <span id="currentScore">0</span>/<span id="totalQuestions2">10</span></div>
+        </div>
+        
+        <div class="question-nav" id="questionNav">
+            <!-- Question navigation buttons will be generated here -->
+        </div>
+        
+        <div class="quiz-body">
+            <div class="quiz-question" id="question"></div>
+            <textarea class="code-editor" id="codeEditor" spellcheck="false"></textarea>
+            <div class="hints">
+                <button class="hint-button" id="hintButton">Show Hint</button>
+                <div class="hint-text" id="hintText"></div>
+            </div>
+            <div class="feedback" id="feedback"></div>
+            <div class="button-container">
+                <button id="checkButton">Check Answer</button>
+                <button id="resetButton">Reset Code</button>
+                <button id="runButton">Run Code</button>
+            </div>
+            
+            <div class="navigation-container">
+                <button class="nav-btn" id="prevButton">Previous Question</button>
+                <button class="nav-btn" id="nextButton">Next Question</button>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Quiz questions with test cases and hints
+        const questions = [
+            {
+                question: "Declare a variable called 'myNumber' and assign it the value 10. Remember to include the PHP opening and closing tags.",
+                testFunction: function(code) {
+                    try {
+                        // Check for PHP tags and variable declaration
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /\$myNumber\s*=\s*10\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: <?php $myNumber = 10; ?>",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Define a constant called 'PI' with the value 3.14159 using the define() function.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /define\s*\(\s*['"]PI['"]\s*,\s*3\.14159\s*\)\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: define('CONSTANT_NAME', value);",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create an indexed array called 'colors' containing the following strings: 'red', 'green', 'blue', 'yellow'.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /\$colors\s*=\s*\[\s*['"]red['"]\s*,\s*['"]green['"]\s*,\s*['"]blue['"]\s*,\s*['"]yellow['"]\s*\]\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use array syntax: $colors = ['red', 'green', 'blue', 'yellow'];",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write a function called 'calculateArea' that takes two parameters: 'width' and 'height', and returns their product (the area).",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /function\s+calculateArea\s*\(\s*\$width\s*,\s*\$height\s*\)\s*\{[\s\S]*return\s+\$width\s*\*\s*\$height\s*;[\s\S]*\}/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "function calculateArea($width, $height) { return $width * $height; }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create an associative array called 'person' with the following key-value pairs: 'name' => 'John', 'age' => 25, 'city' => 'New York'.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /\$person\s*=\s*\[\s*['"]name['"]\s*=>\s*['"]John['"]\s*,\s*['"]age['"]\s*=>\s*25\s*,\s*['"]city['"]\s*=>\s*['"]New York['"]\s*\]\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use associative array syntax: $person = ['name' => 'John', 'age' => 25, 'city' => 'New York'];",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write an if statement that checks if the variable 'age' is greater than or equal to 18. If true, set 'canVote' to true; otherwise, set it to false.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /if\s*\(\s*\$age\s*>=\s*18\s*\)\s*\{\s*\$canVote\s*=\s*true\s*;\s*\}\s*else\s*\{\s*\$canVote\s*=\s*false\s*;\s*\}/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: if ($age >= 18) { $canVote = true; } else { $canVote = false; }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write a for loop that iterates from 1 to 5 and adds each number to an array called 'numbers'.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /\$numbers\s*=\s*\[\s*\]\s*;/.test(code) && 
+                               /for\s*\(\s*\$i\s*=\s*1\s*;\s*\$i\s*<=\s*5\s*;\s*\$i\s*\+\+\s*\)\s*\{[\s\S]*\$numbers\s*\[\s*\]\s*=\s*\$i\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: $numbers = []; for ($i = 1; $i <= 5; $i++) { $numbers[] = $i; }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create a function called 'double' that takes a number as a parameter and returns twice its value. Then call the function with the value 5 and store the result in a variable called 'result'.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /function\s+double\s*\(\s*\$num\s*\)\s*\{[\s\S]*return\s+\$num\s*\*\s*2\s*;[\s\S]*\}/.test(code) && 
+                               /\$result\s*=\s*double\s*\(\s*5\s*\)\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "function double($num) { return $num * 2; } $result = double(5);",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Write a switch statement that checks the value of a variable called 'day'. For 'Monday', 'Tuesday', 'Wednesday', 'Thursday', and 'Friday', set 'isWeekday' to true. For 'Saturday' and 'Sunday', set 'isWeekday' to false. Include a default case.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /switch\s*\(\s*\$day\s*\)\s*\{/.test(code) && 
+                               /case\s+['"]Monday['"]\s*:/.test(code) && 
+                               /case\s+['"]Tuesday['"]\s*:/.test(code) && 
+                               /case\s+['"]Wednesday['"]\s*:/.test(code) && 
+                               /case\s+['"]Thursday['"]\s*:/.test(code) && 
+                               /case\s+['"]Friday['"]\s*:/.test(code) && 
+                               /\$isWeekday\s*=\s*true\s*;/.test(code) && 
+                               /case\s+['"]Saturday['"]\s*:/.test(code) && 
+                               /case\s+['"]Sunday['"]\s*:/.test(code) && 
+                               /\$isWeekday\s*=\s*false\s*;/.test(code) && 
+                               /default\s*:/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "Use the syntax: switch ($day) { case 'Monday': case 'Tuesday': ... $isWeekday = true; break; case 'Saturday': case 'Sunday': $isWeekday = false; break; default: // code; }",
+                userCode: '',
+                answered: false,
+                correct: false
+            },
+            {
+                question: "Create a class called 'Book' with properties: 'title' and 'author', and a method called 'getSummary' that returns a string in the format: 'Title: [title], Author: [author]'.",
+                testFunction: function(code) {
+                    try {
+                        return code.includes('<?php') && 
+                               code.includes('?>') && 
+                               /class\s+Book\s*\{/.test(code) && 
+                               /\$title\s*;/.test(code) && 
+                               /\$author\s*;/.test(code) && 
+                               /function\s+getSummary\s*\(\s*\)\s*\{[\s\S]*return\s+['"]Title:\s*['"]\s*\.\s*\$this->title\s*\.\s*['"],\s*Author:\s*['"]\s*\.\s*\$this->author\s*;/.test(code);
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                hint: "class Book { public $title; public $author; public function getSummary() { return 'Title: ' . $this->title . ', Author: ' . $this->author; } }",
+                userCode: '',
+                answered: false,
+                correct: false
+            }
+        ];
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const codeEditor = document.getElementById('codeEditor');
+        const feedbackElement = document.getElementById('feedback');
+        const checkButton = document.getElementById('checkButton');
+        const resetButton = document.getElementById('resetButton');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const hintButton = document.getElementById('hintButton');
+        const hintText = document.getElementById('hintText');
+        const questionNumberElement = document.getElementById('questionNumber');
+        const totalQuestionsElement = document.getElementById('totalQuestions');
+        const totalQuestionsElement2 = document.getElementById('totalQuestions2');
+        const currentScoreElement = document.getElementById('currentScore');
+        const questionNavElement = document.getElementById('questionNav');
+        const quizContainer = document.getElementById('quizContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const finalScoreElement = document.getElementById('finalScore');
+        // Initialize quiz
+        function initQuiz() {
+            totalQuestionsElement.textContent = questions.length;
+            totalQuestionsElement2.textContent = questions.length;
+            createQuestionNav();
+            loadQuestion(0);
+            updateNavButtons();
+        }
+
+        // Create question navigation
+        function createQuestionNav() {
+            questionNavElement.innerHTML = '';
+            for (let i = 0; i < questions.length; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'question-btn';
+                btn.textContent = i + 1;
+                btn.addEventListener('click', () => {
+                    saveCurrentAnswer();
+                    loadQuestion(i);
+                });
+                questionNavElement.appendChild(btn);
+            }
+            updateQuestionNav();
+        }
+
+        // Update question navigation styling
+        function updateQuestionNav() {
+            const navButtons = questionNavElement.querySelectorAll('.question-btn');
+            navButtons.forEach((btn, index) => {
+                btn.classList.remove('current', 'answered');
+                if (index === currentQuestion) {
+                    btn.classList.add('current');
+                }
+                if (questions[index].answered) {
+                    btn.classList.add('answered');
+                }
+            });
+        }
+
+        // Load question by index
+        function loadQuestion(index) {
+            currentQuestion = index;
+            const question = questions[currentQuestion];
+            
+            questionElement.textContent = question.question;
+            codeEditor.value = question.userCode;
+            
+            if (question.answered) {
+                if (question.correct) {
+                    feedbackElement.className = 'feedback success';
+                    feedbackElement.textContent = 'Correct! Well done!';
+                } else {
+                    feedbackElement.className = 'feedback error';
+                    feedbackElement.textContent = 'That\'s not quite right. You can try again!';
+                }
+            } else {
+                feedbackElement.className = 'feedback';
+                feedbackElement.textContent = '';
+            }
+            
+            questionNumberElement.textContent = currentQuestion + 1;
+            hintText.style.display = 'none';
+            
+            updateQuestionNav();
+            updateNavButtons();
+            updateScore();
+        }
+
+        // Save current answer
+        function saveCurrentAnswer() {
+            questions[currentQuestion].userCode = codeEditor.value;
+        }
+
+        // Run the user's code
+        function runCode() {
+            saveCurrentAnswer();
+            
+            const userCode = questions[currentQuestion].userCode.trim();
+            
+            if (userCode === '') {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = 'Please write some code before running.';
+                return;
+            }
+            
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = 'Note: PHP code cannot be executed in the browser. This is a simulation for learning purposes.';
+        }
+
+        // Check the answer
+        function checkAnswer() {
+            saveCurrentAnswer();
+            
+            const userCode = questions[currentQuestion].userCode.trim();
+            
+            if (userCode === '') {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = 'Please write some code before checking.';
+                return;
+            }
+            
+            const isCorrect = questions[currentQuestion].testFunction(userCode);
+            
+            questions[currentQuestion].answered = true;
+            questions[currentQuestion].correct = isCorrect;
+            
+            if (isCorrect) {
+                feedbackElement.className = 'feedback success';
+                feedbackElement.textContent = 'Correct! Well done!';
+                if (!questions[currentQuestion].correct) {
+                    score++;
+                    updateScore();
+                }
+            } else {
+                feedbackElement.className = 'feedback error';
+                feedbackElement.textContent = 'That\'s not quite right. You can try again!';
+            }
+            
+            updateQuestionNav();
+        }
+
+        // Reset current question code
+        function resetCode() {
+            codeEditor.value = '';
+            questions[currentQuestion].userCode = '';
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = '';
+        }
+
+        // Navigate to previous question
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                saveCurrentAnswer();
+                loadQuestion(currentQuestion - 1);
+            }
+        }
+
+        // Navigate to next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                saveCurrentAnswer();
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        // Update navigation buttons state
+        function updateNavButtons() {
+            prevButton.disabled = currentQuestion === 0;
+            nextButton.disabled = currentQuestion === questions.length - 1;
+        }
+
+        // Show hint
+        function showHint() {
+            const hint = questions[currentQuestion].hint;
+            hintText.textContent = hint;
+            hintText.style.display = 'block';
+        }
+
+        // Calculate score
+        function calculateScore() {
+            score = 0;
+            for (const question of questions) {
+                if (question.correct) {
+                    score++;
+                }
+            }
+            return score;
+        }
+
+        // Update score display
+        function updateScore() {
+            score = calculateScore();
+            currentScoreElement.textContent = score;
+        }
+
+        // Event listeners
+        checkButton.addEventListener('click', checkAnswer);
+        resetButton.addEventListener('click', resetCode);
+        runButton.addEventListener('click', runCode);
+        prevButton.addEventListener('click', prevQuestion);
+        nextButton.addEventListener('click', nextQuestion);
+        hintButton.addEventListener('click', showHint);
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
