@@ -78,19 +78,6 @@
             background-color: #f8f8f8;
         }
         
-        .code-output {
-            width: 100%;
-            min-height: 80px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            padding: 10px;
-            font-family: monospace;
-            margin-bottom: 15px;
-            background-color: #f0f0f0;
-            white-space: pre-wrap;
-            overflow-y: auto;
-            display: none;
-        }
         
         .button-container {
             display: flex;
@@ -276,7 +263,6 @@
         <div class="quiz-body">
             <div class="quiz-question" id="question"></div>
             <textarea class="code-editor" id="codeEditor" spellcheck="false"></textarea>
-            <div class="code-output" id="codeOutput">Output will appear here when you run your code.</div>
             <div class="hints">
                 <button class="hint-button" id="hintButton">Show Hint</button>
                 <div class="hint-text" id="hintText"></div>
@@ -285,7 +271,6 @@
             <div class="button-container">
                 <button id="checkButton">Check Answer</button>
                 <button id="resetButton">Reset Code</button>
-                <button id="runButton">Run Code</button>
             </div>
             
             <div class="navigation-container">
@@ -484,7 +469,6 @@
         // DOM elements
         const questionElement = document.getElementById('question');
         const codeEditor = document.getElementById('codeEditor');
-        const codeOutput = document.getElementById('codeOutput');
         const feedbackElement = document.getElementById('feedback');
         const checkButton = document.getElementById('checkButton');
         const resetButton = document.getElementById('resetButton');
@@ -560,8 +544,6 @@
                 feedbackElement.textContent = '';
             }
             
-            // Hide output area when changing questions
-            codeOutput.style.display = 'none';
             
             questionNumberElement.textContent = currentQuestion + 1;
             hintText.style.display = 'none';
@@ -576,65 +558,6 @@
             questions[currentQuestion].userCode = codeEditor.value;
         }
 
-        // Run the user's code
-        function runCode() {
-            saveCurrentAnswer();
-            
-            const userCode = questions[currentQuestion].userCode.trim();
-            
-            if (userCode === '') {
-                feedbackElement.className = 'feedback error';
-                feedbackElement.textContent = 'Please write some code before running.';
-                return;
-            }
-            
-            // Show the output area
-            codeOutput.style.display = 'block';
-            
-            // Simulate PHP execution
-            let output = '';
-            
-            // Basic simulation of PHP output based on the question
-            switch(currentQuestion) {
-                case 0: // Variable declaration
-                    output = "Variable $myNumber created with value: 10";
-                    break;
-                case 1: // Constant
-                    output = "Constant PI defined with value: 3.14159";
-                    break;
-                case 2: // Array
-                    output = "Array (\n    [0] => red\n    [1] => green\n    [2] => blue\n    [3] => yellow\n)";
-                    break;
-                case 3: // Function
-                    output = "Function calculateArea() defined.\nExample: calculateArea(5, 10) = 50";
-                    break;
-                case 4: // Associative array
-                    output = "Array (\n    [name] => Ali\n    [age] => 25\n    [city] => Riffa\n)";
-                    break;
-                case 5: // If statement
-                    output = "For age = 20:\n$canVote = true";
-                    break;
-                case 6: // For loop
-                    output = "Array (\n    [0] => 1\n    [1] => 2\n    [2] => 3\n    [3] => 4\n    [4] => 5\n)";
-                    break;
-                case 7: // Function with call
-                    output = "Function double() defined.\ndouble(5) = 10\n$result = 10";
-                    break;
-                case 8: // Switch
-                    output = "For day = 'Monday':\n$isWeekday = true\n\nFor day = 'Sunday':\n$isWeekday = false";
-                    break;
-                case 9: // Class
-                    output = "Class Book defined.\n\n$book = new Book();\n$book->title = 'PHP Basics';\n$book->author = 'Ali';\necho $book->getSummary();\n\nOutput: Title: PHP Basics, Author: Ali";
-                    break;
-                default:
-                    output = "Code executed successfully.";
-            }
-            
-            codeOutput.textContent = output;
-            
-            feedbackElement.className = 'feedback';
-            feedbackElement.textContent = 'Note: PHP code cannot be executed in the browser. This is a simulated output for learning purposes.';
-        }
 
         // Check the answer
         function checkAnswer() {
@@ -674,7 +597,6 @@
             questions[currentQuestion].userCode = '';
             feedbackElement.className = 'feedback';
             feedbackElement.textContent = '';
-            codeOutput.style.display = 'none';
         }
 
         // Navigate to previous question
@@ -726,7 +648,6 @@
         // Event listeners
         checkButton.addEventListener('click', checkAnswer);
         resetButton.addEventListener('click', resetCode);
-        runButton.addEventListener('click', runCode);
         prevButton.addEventListener('click', prevQuestion);
         nextButton.addEventListener('click', nextQuestion);
         hintButton.addEventListener('click', showHint);
