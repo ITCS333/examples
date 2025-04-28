@@ -1,83 +1,10 @@
-<?php require 'images.php';
-
-// Initialize variables for form handling
-$searchTerm = '';
-$filteredImages = $images;
-$sortBy = 'default';
-$message = '';
-
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the search term from the form
-    $searchTerm = isset($_POST['search']) ? trim($_POST['search']) : '';
-    $sortBy = isset($_POST['sort']) ? $_POST['sort'] : 'default';
-    
-    // Filter images based on search term (case-insensitive)
-    if (!empty($searchTerm)) {
-        $filteredImages = array_filter($images, function($image) use ($searchTerm) {
-            return (stripos($image['title'], $searchTerm) !== false || 
-                   stripos($image['source'], $searchTerm) !== false);
-        });
-    }
-
-    // Contact form handling
-    if (isset($_POST['contact_submit'])) {
-        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-        $comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
-        
-        // Simple validation
-        if (empty($name) || empty($email) || empty($comment)) {
-            $message = '<div class="alert alert-danger">Please fill in all fields</div>';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $message = '<div class="alert alert-danger">Please enter a valid email address</div>';
-        } else {
-            try {
-                // Create database helper instance (reusing the same configuration from images.php)
-                require_once 'DatabaseHelper.php';
-                $db_host = 'localhost';
-                $db_name = getenv('DB_NAME') ?: 'image_gallery';
-                $db_user = getenv('DB_USER') ?: 'root';
-                $db_pass = getenv('DB_PASS') ?: '';
-                
-                $dbHelper = new DatabaseHelper($db_host, $db_name, $db_user, $db_pass);
-                
-                // Insert the contact message into the database
-                if ($dbHelper->insertContact($name, $email, $comment)) {
-                    $message = '<div class="alert alert-success">Thank you for your message, ' . 
-                               htmlspecialchars($name) . '! Your message has been saved and we will get back to you soon.</div>';
-                } else {
-                    $message = '<div class="alert alert-warning">Thank you for your message, ' . 
-                               htmlspecialchars($name) . '! However, there was an issue saving it to our database.</div>';
-                }
-            } catch (PDOException $e) {
-                // Log the error (in a production environment)
-                error_log('Database error: ' . $e->getMessage());
-                
-                // Show a generic message to the user
-                $message = '<div class="alert alert-warning">Thank you for your message, ' . 
-                           htmlspecialchars($name) . '! However, there was an issue with our system. Please try again later.</div>';
-            }
-        }
-    }
-    
-    // Sort images
-    if ($sortBy === 'title-asc') {
-        usort($filteredImages, function($a, $b) {
-            return strcmp($a['title'], $b['title']);
-        });
-    } elseif ($sortBy === 'title-desc') {
-        usort($filteredImages, function($a, $b) {
-            return strcmp($b['title'], $a['title']);
-        });
-    }
-} else {
-    // Default ordering
-    shuffle($filteredImages);
-}
-
-// Count filtered images
-$totalImages = count($filteredImages);
+<?php
+/**
+ * Image Gallery Frontend
+ * 
+ * This file provides the HTML structure for the image gallery application.
+ * The actual data is loaded via JavaScript from the API.
+ */
 ?>
 
 <!DOCTYPE html>
@@ -103,18 +30,18 @@ $totalImages = count($filteredImages);
                 <h5 class="mb-0">Search & Filter Images</h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="row g-3">
+                <form id="search-form" class="row g-3">
                     <div class="col-md-6">
                         <label for="search" class="form-label">Search by title or source</label>
                         <input type="text" class="form-control" id="search" name="search" 
-                               placeholder="Enter keywords..." value="<?= htmlspecialchars($searchTerm); ?>">
+                               placeholder="Enter keywords...">
                     </div>
                     <div class="col-md-4">
                         <label for="sort" class="form-label">Sort by</label>
                         <select class="form-select" id="sort" name="sort">
-                            <option value="default" <?= ($sortBy === 'default') ? 'selected' : ''; ?>>Random Order</option>
-                            <option value="title-asc" <?= ($sortBy === 'title-asc') ? 'selected' : ''; ?>>Title (A-Z)</option>
-                            <option value="title-desc" <?= ($sortBy === 'title-desc') ? 'selected' : ''; ?>>Title (Z-A)</option>
+                            <option value="default">Random Order</option>
+                            <option value="title-asc">Title (A-Z)</option>
+                            <option value="title-desc">Title (Z-A)</option>
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
@@ -123,38 +50,21 @@ $totalImages = count($filteredImages);
                 </form>
             </div>
             <div class="card-footer">
-                <p class="mb-0">Showing <?= $totalImages; ?> image<?= ($totalImages !== 1) ? 's' : ''; ?>
-                <?php if (!empty($searchTerm)): ?>
-                    for search: "<strong><?= htmlspecialchars($searchTerm); ?></strong>"
-                <?php endif; ?>
-                </p>
+                <p class="mb-0">Showing <span id="total-images">0</span> image(s)<span id="search-term-display"></span></p>
             </div>
         </div>
 
-        <!-- Display results or no results message -->
-        <?php if (empty($filteredImages)): ?>
-            <div class="alert alert-info">
-                <h4>No images found</h4>
-                <p>Sorry, no images match your search criteria. Try a different search term.</p>
-                <a href="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="btn btn-outline-primary">Reset Filters</a>
-            </div>
-        <?php else: ?>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <?php foreach ($filteredImages as $image) : ?>
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src="<?= $image['url']; ?>"
-                            class="card-img-top" style="height: 200px; object-fit: cover;"
-                            alt="<?= $image['title']; ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= $image['title']; ?></h5>
-                            <p class="card-text text-muted small">Source: <?= $image['source']; ?></p>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+        <!-- No results message (hidden by default) -->
+        <div id="no-results-container" class="alert alert-info d-none">
+            <h4>No images found</h4>
+            <p>Sorry, no images match your search criteria. Try a different search term.</p>
+            <a href="index.php" class="btn btn-outline-primary">Reset Filters</a>
+        </div>
+
+        <!-- Image Gallery Container -->
+        <div id="gallery-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Images will be loaded here by JavaScript -->
+        </div>
 
         <!-- Contact Form -->
         <div class="card mt-5 shadow-sm">
@@ -162,8 +72,8 @@ $totalImages = count($filteredImages);
                 <h5 class="mb-0">Contact Us</h5>
             </div>
             <div class="card-body">
-                <?= $message; ?>
-                <form method="POST" action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+                <div id="message-container"></div>
+                <form id="contact-form">
                     <div class="mb-3">
                         <label for="name" class="form-label">Your Name</label>
                         <input type="text" class="form-control" id="name" name="name" required>
@@ -176,7 +86,7 @@ $totalImages = count($filteredImages);
                         <label for="comment" class="form-label">Your Message</label>
                         <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-success" name="contact_submit" value="1">Send Message</button>
+                    <button type="submit" class="btn btn-success">Send Message</button>
                 </form>
             </div>
         </div>
@@ -185,7 +95,10 @@ $totalImages = count($filteredImages);
             <p class="mb-0">&copy; <?= date('Y'); ?> PHP Image Gallery Demo</p>
         </footer>
     </div>
+    
+    <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/gallery.js"></script>
 </body>
 
 </html>
