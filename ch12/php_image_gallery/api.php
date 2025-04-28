@@ -23,22 +23,16 @@ require_once 'DatabaseHelper.php';
 
 // Database configuration
 $db_host = 'localhost';
-$db_name = getenv('DB_NAME') ?: 'image_gallery';
-$db_user = getenv('DB_USER') ?: 'root';
-$db_pass = getenv('DB_PASS') ?: '';
+$db_name = getenv('db_name') ?? 'image_gallery';
+$db_user = getenv('db_user') ?? 'root';
+$db_pass = getenv('db_pass') ?? '';
 
 // Create database helper instance
 $dbHelper = new DatabaseHelper($db_host, $db_name, $db_user, $db_pass);
 
-// Get the request path
-$request_uri = $_SERVER['REQUEST_URI'];
-$uri_parts = explode('?', $request_uri);
-$path = $uri_parts[0];
-$endpoint = basename($path);
-
 // Route the request based on the endpoint
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && $endpoint === 'api.php') {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Get images endpoint
         $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
         $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'default';
@@ -162,7 +156,7 @@ try {
             'data' => $images
         ]);
     } 
-    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === 'api.php') {
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get the request body
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
