@@ -2,34 +2,33 @@
 /**
  * Image Data from MySQL Database
  * 
- * This file connects to a MySQL database using PDO,
+ * This file connects to a MySQL database using the DatabaseHelper class,
  * creates the images table if it doesn't exist,
  * populates it with sample data if empty,
  * and retrieves the image data.
  */
 
+// Include the DatabaseHelper class
+require_once 'DatabaseHelper.php';
+
 // Database configuration
 $db_host = 'localhost';
-$db_name = getenv('DB_NAME');
-$db_user = getenv('DB_USER');
-$db_pass = getenv('DB_PASS');
+$db_name = getenv('DB_NAME') ?: 'image_gallery';
+$db_user = getenv('DB_USER') ?: 'root';
+$db_pass = getenv('DB_PASS') ?: '';
 
 // Initialize images array
 $images = [];
 
 try {
-    // Create PDO connection
-    $pdo = new PDO("mysql:host=$db_host;charset=utf8mb4", $db_user, $db_pass);
+    // Create database helper instance
+    $dbHelper = new DatabaseHelper($db_host, $db_name, $db_user, $db_pass);
     
-    // Set error mode to exceptions
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Create database if it doesn't exist
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$db_name`");
-    $pdo->exec("USE `$db_name`");
+    // Get PDO connection
+    $pdo = $dbHelper->getPDO();
     
     // Create images table if it doesn't exist
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `images` (
+    $dbHelper->exec("CREATE TABLE IF NOT EXISTS `images` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `url` VARCHAR(255) NOT NULL,
         `title` VARCHAR(100) NOT NULL,
@@ -38,7 +37,7 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     
     // Check if the table is empty
-    $stmt = $pdo->query("SELECT COUNT(*) FROM `images`");
+    $stmt = $dbHelper->query("SELECT COUNT(*) FROM `images`");
     $count = $stmt->fetchColumn();
     
     // If table is empty, insert sample data
@@ -108,7 +107,7 @@ try {
         ];
         
         // Prepare insert statement
-        $stmt = $pdo->prepare("INSERT INTO `images` (`url`, `title`, `source`) VALUES (?, ?, ?)");
+        $stmt = $dbHelper->prepare("INSERT INTO `images` (`url`, `title`, `source`) VALUES (?, ?, ?)");
         
         // Insert each image
         foreach ($sampleImages as $image) {
@@ -119,7 +118,7 @@ try {
     }
     
     // Fetch all images from database
-    $stmt = $pdo->query("SELECT `url`, `title`, `source` FROM `images` ORDER BY `id`");
+    $stmt = $dbHelper->query("SELECT `url`, `title`, `source` FROM `images` ORDER BY `id`");
     $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (PDOException $e) {
