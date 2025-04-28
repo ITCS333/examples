@@ -32,8 +32,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $message = '<div class="alert alert-danger">Please enter a valid email address</div>';
         } else {
-            // In a real application, you would process the form data here (e.g., save to database, send email)
-            $message = '<div class="alert alert-success">Thank you for your message, ' . htmlspecialchars($name) . '! We will get back to you soon.</div>';
+            try {
+                // Create database helper instance (reusing the same configuration from images.php)
+                require_once 'DatabaseHelper.php';
+                $db_host = 'localhost';
+                $db_name = getenv('DB_NAME') ?: 'image_gallery';
+                $db_user = getenv('DB_USER') ?: 'root';
+                $db_pass = getenv('DB_PASS') ?: '';
+                
+                $dbHelper = new DatabaseHelper($db_host, $db_name, $db_user, $db_pass);
+                
+                // Insert the contact message into the database
+                if ($dbHelper->insertContact($name, $email, $comment)) {
+                    $message = '<div class="alert alert-success">Thank you for your message, ' . 
+                               htmlspecialchars($name) . '! Your message has been saved and we will get back to you soon.</div>';
+                } else {
+                    $message = '<div class="alert alert-warning">Thank you for your message, ' . 
+                               htmlspecialchars($name) . '! However, there was an issue saving it to our database.</div>';
+                }
+            } catch (PDOException $e) {
+                // Log the error (in a production environment)
+                error_log('Database error: ' . $e->getMessage());
+                
+                // Show a generic message to the user
+                $message = '<div class="alert alert-warning">Thank you for your message, ' . 
+                           htmlspecialchars($name) . '! However, there was an issue with our system. Please try again later.</div>';
+            }
         }
     }
     

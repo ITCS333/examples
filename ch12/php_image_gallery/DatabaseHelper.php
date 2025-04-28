@@ -83,5 +83,42 @@ class DatabaseHelper {
     public function exec($sql) {
         return $this->getPDO()->exec($sql);
     }
+    
+    /**
+     * Create contacts table if it doesn't exist
+     * 
+     * @return bool True if successful
+     * @throws PDOException If creation fails
+     */
+    public function createContactsTable() {
+        $sql = "CREATE TABLE IF NOT EXISTS `contacts` (
+            `id` INT AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(100) NOT NULL,
+            `email` VARCHAR(100) NOT NULL,
+            `message` TEXT NOT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        
+        $this->exec($sql);
+        return true;
+    }
+    
+    /**
+     * Insert a new contact message
+     * 
+     * @param string $name The name of the contact
+     * @param string $email The email of the contact
+     * @param string $message The message content
+     * @return bool True if successful
+     * @throws PDOException If insertion fails
+     */
+    public function insertContact($name, $email, $message) {
+        // Make sure the contacts table exists
+        $this->createContactsTable();
+        
+        // Prepare and execute the insert statement
+        $stmt = $this->prepare("INSERT INTO `contacts` (`name`, `email`, `message`) VALUES (?, ?, ?)");
+        return $stmt->execute([$name, $email, $message]);
+    }
 }
 ?>
