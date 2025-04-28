@@ -10,9 +10,9 @@
 
 // Database configuration
 $db_host = 'localhost';
-$db_name = 'image_gallery';
-$db_user = 'root';
-$db_pass = '';
+$db_name = getenv('DB_NAME');
+$db_user = getenv('DB_USER');
+$db_pass = getenv('DB_PASS');
 
 // Initialize images array
 $images = [];
