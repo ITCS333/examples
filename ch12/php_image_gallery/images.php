@@ -27,99 +27,11 @@ try {
     // Get PDO connection
     $pdo = $dbHelper->getPDO();
     
-    // Create images table if it doesn't exist
-    $dbHelper->exec("CREATE TABLE IF NOT EXISTS `images` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `url` VARCHAR(255) NOT NULL,
-        `title` VARCHAR(100) NOT NULL,
-        `source` VARCHAR(100) NOT NULL,
-        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // Create and populate images table if needed, then fetch all images
+    $dbHelper->createAndPopulateImagesTable();
+    $images = $dbHelper->getImages();
     
-    // Check if the table is empty
-    $stmt = $dbHelper->query("SELECT COUNT(*) FROM `images`");
-    $count = $stmt->fetchColumn();
-    
-    // If table is empty, insert sample data
-    if ($count == 0) {
-        // Sample image data
-        $sampleImages = [
-            [
-                'url' => 'https://picsum.photos/id/1015/600/400',
-                'title' => 'Scenic Mountain Lake',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1018/600/400',
-                'title' => 'Foggy Mountains',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1019/600/400',
-                'title' => 'Forest Waterfall',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1022/600/400',
-                'title' => 'Northern Lights',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1035/600/400',
-                'title' => 'Snowy Mountain Peaks',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1039/600/400',
-                'title' => 'Calm Lake View',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1043/600/400',
-                'title' => 'Mountain Landscape',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1044/600/400',
-                'title' => 'Rocky Coastline',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1047/600/400',
-                'title' => 'Town by the Sea',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1050/600/400',
-                'title' => 'Mountain Road',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1051/600/400',
-                'title' => 'Autumn Forest',
-                'source' => 'Picsum Photos'
-            ],
-            [
-                'url' => 'https://picsum.photos/id/1059/600/400',
-                'title' => 'Desert Road',
-                'source' => 'Picsum Photos'
-            ]
-        ];
-        
-        // Prepare insert statement
-        $stmt = $dbHelper->prepare("INSERT INTO `images` (`url`, `title`, `source`) VALUES (?, ?, ?)");
-        
-        // Insert each image
-        foreach ($sampleImages as $image) {
-            $stmt->execute([$image['url'], $image['title'], $image['source']]);
-        }
-        
-        echo "<!-- Database initialized with sample images -->\n";
-    }
-    
-    // Fetch all images from database
-    $stmt = $dbHelper->query("SELECT `url`, `title`, `source` FROM `images` ORDER BY `id`");
-    $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo "<!-- Database initialized with images -->\n";
     
 } catch (PDOException $e) {
     // If database connection fails, use static array as fallback

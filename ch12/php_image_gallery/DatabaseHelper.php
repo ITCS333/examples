@@ -120,5 +120,142 @@ class DatabaseHelper {
         $stmt = $this->prepare("INSERT INTO `contacts` (`name`, `email`, `message`) VALUES (?, ?, ?)");
         return $stmt->execute([$name, $email, $message]);
     }
+    
+    /**
+     * Create images table if it doesn't exist and populate with sample data if empty
+     * 
+     * @return array The sample images that were inserted (if any)
+     * @throws PDOException If creation or insertion fails
+     */
+    public function createAndPopulateImagesTable() {
+        // Create images table if it doesn't exist
+        $this->exec("CREATE TABLE IF NOT EXISTS `images` (
+            `id` INT AUTO_INCREMENT PRIMARY KEY,
+            `url` VARCHAR(255) NOT NULL,
+            `title` VARCHAR(100) NOT NULL,
+            `source` VARCHAR(100) NOT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        
+        // Check if the table is empty
+        $stmt = $this->query("SELECT COUNT(*) FROM `images`");
+        $count = $stmt->fetchColumn();
+        
+        // If table is empty, insert sample data
+        if ($count == 0) {
+            // Sample image data
+            $sampleImages = [
+                [
+                    'url' => 'https://picsum.photos/id/1015/600/400',
+                    'title' => 'Scenic Mountain Lake',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1018/600/400',
+                    'title' => 'Foggy Mountains',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1019/600/400',
+                    'title' => 'Forest Waterfall',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1022/600/400',
+                    'title' => 'Northern Lights',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1035/600/400',
+                    'title' => 'Snowy Mountain Peaks',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1039/600/400',
+                    'title' => 'Calm Lake View',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1043/600/400',
+                    'title' => 'Mountain Landscape',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1044/600/400',
+                    'title' => 'Rocky Coastline',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1047/600/400',
+                    'title' => 'Town by the Sea',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1050/600/400',
+                    'title' => 'Mountain Road',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1051/600/400',
+                    'title' => 'Autumn Forest',
+                    'source' => 'Picsum Photos'
+                ],
+                [
+                    'url' => 'https://picsum.photos/id/1059/600/400',
+                    'title' => 'Desert Road',
+                    'source' => 'Picsum Photos'
+                ]
+            ];
+            
+            // Prepare insert statement
+            $stmt = $this->prepare("INSERT INTO `images` (`url`, `title`, `source`) VALUES (?, ?, ?)");
+            
+            // Insert each image
+            foreach ($sampleImages as $image) {
+                $stmt->execute([$image['url'], $image['title'], $image['source']]);
+            }
+            
+            return $sampleImages;
+        }
+        
+        return [];
+    }
+    
+    /**
+     * Get images with optional search and sort
+     * 
+     * @param string $searchTerm Optional search term to filter images
+     * @param string $sortBy Optional sort order (default, title-asc, title-desc)
+     * @return array Array of image objects
+     * @throws PDOException If query fails
+     */
+    public function getImages($searchTerm = '', $sortBy = 'default') {
+        // Make sure the images table exists and has data
+        $this->createAndPopulateImagesTable();
+        
+        // Build the SQL query based on search term
+        $sql = "SELECT `url`, `title`, `source` FROM `images`";
+        $params = [];
+        
+        if (!empty($searchTerm)) {
+            $sql .= " WHERE `title` LIKE ? OR `source` LIKE ?";
+            $params[] = "%$searchTerm%";
+            $params[] = "%$searchTerm%";
+        }
+        
+        // Add ordering based on sort parameter
+        if ($sortBy === 'title-asc') {
+            $sql .= " ORDER BY `title` ASC";
+        } elseif ($sortBy === 'title-desc') {
+            $sql .= " ORDER BY `title` DESC";
+        } else {
+            $sql .= " ORDER BY `id` ASC";
+        }
+        
+        // Execute the query
+        $stmt = $this->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
