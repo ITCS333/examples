@@ -248,7 +248,6 @@ function downloadFile($db) {
         }
         
         // Set headers for file download
-        header('Content-Type: application/json'); // Reset content type
         header('Content-Type: ' . $file['mime_type']);
         header('Content-Disposition: attachment; filename="' . $file['filename'] . '"');
         header('Content-Length: ' . $file['size']);
