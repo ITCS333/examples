@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracker</title>
+    <!-- Pico.css Framework for styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="orders.css">
+    <script src="orders.js" defer></script>
+</head>
+<body>
+    <main class="container">
+        <h1 style="text-align: center;">Order Tracker</h1>
+
+        <!-- Order Form -->
+        <article>
+            <form id="order-form">
+                <input type="hidden" id="order-id">
+                <h2 id="form-title" class="form-title">Add New Order</h2>
+
+                <!-- Customer Phone -->
+                <label for="phone">
+                    Customer Phone
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="e.g., 39123456" 
+                        required 
+                        pattern="[0-9]{8}" 
+                        title="Please enter a valid 8-digit Bahraini number.">
+                </label>
+
+                <!-- Items -->
+                <fieldset>
+                    <legend>Items</legend>
+                    <div id="items-container" class="items-container">
+                        <!-- Item rows will be dynamically added here -->
+                    </div>
+                    <button type="button" class="secondary outline" onclick="addItemRow()">+ Add Item</button>
+                </fieldset>
+
+                <!-- Notes -->
+                <label for="notes">
+                    Notes
+                    <textarea id="notes" name="notes" placeholder="e.g., Extra ketchup, no onions..."></textarea>
+                </label>
+                
+                <!-- Submit Button -->
+                <button type="submit" id="submit-button">Add Order</button>
+                <button type="button" id="cancel-edit-button" class="secondary" style="display: none;" onclick="cancelEdit()">Cancel Edit</button>
+            </form>
+        </article>
+
+        <!-- Orders List -->
+        <section id="orders-list">
+            <h2>Current Orders</h2>
+            <div id="orders-container">
+                <!-- Orders will be dynamically rendered here -->
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+
+
