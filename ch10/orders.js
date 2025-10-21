@@ -267,7 +267,6 @@ function renderOrders() {
         // Column: Actions
         const actionsCell = row.insertCell();
         actionsCell.innerHTML = `
-            <div style="font-size: 8pt">
 	        <div role="group">
                     <button class="secondary outline" onclick="startEdit(${order.id})">📝</button>
                     <button class="contrast" onclick="deleteOrder(${order.id})">❌</button>
@@ -275,7 +274,6 @@ function renderOrders() {
                         ${order.status === 'pending' ? '✅' : '⏳'}
                     </button>
 		</div>
-            </div>
         `;
     });
 }

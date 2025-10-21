@@ -13,6 +13,13 @@ tr.completed {
 tr.completed td {
     text-decoration: line-through;
 }
+
+td button {
+    display: inline-block;
+    width: 30%;
+    padding: 0;
+    margin: 0;
+}
 .items-container {
     display: flex;
     flex-direction: column;
