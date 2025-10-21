@@ -1,65 +1,62 @@
-// --- INITIALIZATION ---
-// We wrap the initial setup in a DOMContentLoaded event to ensure all HTML elements are ready.
-document.addEventListener('DOMContentLoaded', () => {
-    const orderForm = document.getElementById('order-form');
-    const searchInput = document.getElementById('search-input');
-    const sortSelect = document.getElementById('sort-select');
+const orderForm = document.getElementById('order-form');
+const searchInput = document.getElementById('search-input');
+const sortSelect = document.getElementById('sort-select');
 
-    // Load and display orders on page load
-    renderOrders();
-    // Add initial item row to the form
-    addItemRow();
+// Load and display orders on page load
+renderOrders();
+// Add initial item row to the form
+addItemRow();
 
-    // Handle form submission for adding/editing orders
-    orderForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const orderId = document.getElementById('order-id').value;
-        const phone = document.getElementById('phone').value;
-        const notes = document.getElementById('notes').value;
-        
-        const items = [];
-        const itemRows = document.querySelectorAll('.item-row');
-        itemRows.forEach(row => {
-            const name = row.querySelector('input[name="item-name"]').value;
-            const price = parseFloat(row.querySelector('input[name="item-price"]').value);
-            if (name && !isNaN(price) && price > 0) {
-                items.push({ name, price });
-            }
-        });
-
-        if (items.length === 0) {
-            alert("Please add at least one valid item.");
-            return;
+// Handle form submission for adding/editing orders
+orderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const orderId = document.getElementById('order-id').value;
+    const phone = document.getElementById('phone').value;
+    const notes = document.getElementById('notes').value;
+    
+    const items = [];
+    const itemRows = document.querySelectorAll('.item-row');
+    itemRows.forEach(row => {
+        const name = row.querySelector('input[name="item-name"]').value;
+        const price = parseFloat(row.querySelector('input[name="item-price"]').value);
+        if (name && !isNaN(price) && price > 0) {
+            items.push({ name, price });
         }
-
-        const order = {
-            id: orderId ? parseInt(orderId) : Date.now(),
-            phone,
-            items,
-            notes,
-            status: 'pending' // Default status
-        };
-
-        if (orderId) {
-            updateOrder(order);
-        } else {
-            addOrder(order);
-        }
-
-        orderForm.reset();
-        document.getElementById('items-container').innerHTML = '';
-        addItemRow(); 
-        cancelEdit();
-        renderOrders();
     });
 
-    // Add event listener for the search input
-    searchInput.addEventListener('input', renderOrders);
+    if (items.length === 0) {
+        alert("Please add at least one valid item.");
+        return;
+    }
 
-    // Add event listener for the sort dropdown
-    sortSelect.addEventListener('change', renderOrders);
+    const order = {
+        id: orderId ? parseInt(orderId) : Date.now(),
+        phone,
+        items,
+        notes,
+        status: 'pending' // Default status
+    };
+
+    if (orderId) {
+        updateOrder(order);
+    } else {
+        addOrder(order);
+    }
+
+    orderForm.reset();
+    document.getElementById('items-container').innerHTML = '';
+    addItemRow(); 
+    cancelEdit();
+    renderOrders();
 });
+
+// Add event listener for the search input
+searchInput.addEventListener('input', renderOrders);
+
+// Add event listener for the sort dropdown
+sortSelect.addEventListener('change', renderOrders);
+
 
 
 // --- DATA FUNCTIONS ---
